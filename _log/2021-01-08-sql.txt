@@ -1,0 +1,78 @@
+23:42:08(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+23:42:08(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+23:47:23(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+23:47:23(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+23:47:25(0); 
+Select Count(*) as _count from [User] u
+join [Dept] d on u.DeptId=d.Id 
+23:47:25(0); 
+select u.*, d.name as DeptName from [User] u
+join [Dept] d on u.DeptId=d.Id order by u.Id
+offset 0 rows fetch next 10 rows only
+
+23:47:52(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+23:47:52(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+23:47:54(0); 
+Select Count(*) as _count from [User] u
+join [Dept] d on u.DeptId=d.Id 
+23:47:54(0); 
+select u.*, d.name as DeptName from [User] u
+join [Dept] d on u.DeptId=d.Id order by u.Id
+offset 0 rows fetch next 10 rows only
+
+23:50:32(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+23:50:32(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+23:50:37(0); 
+Select Count(*) as _count from [User] u
+join [Dept] d on u.DeptId=d.Id 
+23:50:37(0); 
+select u.*, d.name as DeptName from [User] u
+join [Dept] d on u.DeptId=d.Id order by u.Id
+offset 0 rows fetch next 10 rows only
+
+23:50:44(0); Select Id,Account,Name,DeptId,Status From dbo.[User] Where Id=@_Id(U01)
+23:50:44(0); Select Id,UserId,JobName,JobType,JobPlace,StartEnd,CorpName,CorpUsers,IsManaged,JobDesc From dbo.[UserJob] Where UserId in ('U01')
+23:50:44(0); Select Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated From dbo.[UserSchool] Where UserId in ('U01')
+23:50:44(0); Select Id,UserId,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel,Sort From dbo.[UserLang] Where UserId in ('U01') Order By Sort
+23:50:44(0); Select Id,UserId,LicenseName,StartEnd,FileName From dbo.[UserLicense] Where UserId in ('U01')
+23:50:44(0); Select Id,UserId,SkillName,SkillDesc,Sort From dbo.[UserSkill] Where UserId in ('U01')

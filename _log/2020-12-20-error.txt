@@ -1,0 +1,116 @@
+00:59:13(0); _cmd.ExecuteReader() error: 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+, Invalid object name 'dbo._Code'.
+00:59:13(0); no file: D:\_project2\HrAdm\wwwroot/locale/zh-TW/BaseR.json
+01:01:12(0); _cmd.ExecuteReader() error: 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+, Invalid object name 'dbo._Code'.
+01:01:12(0); no file: D:\_project2\HrAdm\wwwroot/locale/zh-TW/BaseR.json
+11:54:21(0); _cmd.ExecuteReader() error: 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+, Invalid object name 'dbo._Code'.
+11:59:05(0); _cmd.ExecuteReader() error: 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+, Invalid object name 'dbo._Code'.
+11:59:06(0); _cmd.ExecuteReader() error: 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+, Incorrect syntax near '0'.
+Invalid usage of the option next in the FETCH statement.
+
+12:01:26(0); _cmd.ExecuteReader() error: 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+, Invalid object name 'dbo._Code'.
+12:01:27(0); _cmd.ExecuteReader() error: 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+, Incorrect syntax near '0'.
+Invalid usage of the option next in the FETCH statement.
+
+12:05:17(0); _cmd.ExecuteReader() error: 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+, Invalid object name 'dbo._Code'.
+12:05:18(0); _cmd.ExecuteReader() error: 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+, Incorrect syntax near '0'.
+Invalid usage of the option next in the FETCH statement.
+
+12:05:49(0); _cmd.ExecuteReader() error: 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+, Invalid object name 'dbo._Code'.
+12:05:50(0); _cmd.ExecuteReader() error: 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+, Incorrect syntax near '0'.
+Invalid usage of the option next in the FETCH statement.
+
+12:08:24(0); _cmd.ExecuteReader() error: 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+, Invalid object name 'dbo._Code'.
+12:08:24(0); _cmd.ExecuteReader() error: 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+, Incorrect syntax near '0'.
+Invalid usage of the option next in the FETCH statement.
+
+12:12:06(0); _cmd.ExecuteReader() error: 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+, Invalid column name 'zhTW'.
+12:12:06(0); _cmd.ExecuteReader() error: 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+, Incorrect syntax near '0'.
+Invalid usage of the option next in the FETCH statement.
+
+12:17:47(0); _cmd.ExecuteReader() error: 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+, Incorrect syntax near '0'.
+Invalid usage of the option next in the FETCH statement.
+
+12:38:03(0); Db.UpdateDb() error: Cannot insert the value NULL into column 'Sort', table 'Hr.dbo.UserSchool'; column does not allow nulls. INSERT fails.
+The statement has been terminated. 
+sql:Insert Into dbo.[UserSchool] (Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated) Values (@Id,@UserId,@SchoolName,@SchoolDept,@SchoolType,@StartEnd,@Graduated)(5XL9P59V2A,U01,11,22,33,44,1)
+12:41:52(0); Db.UpdateDb() error: Cannot insert the value NULL into column 'Sort', table 'Hr.dbo.UserLicense'; column does not allow nulls. INSERT fails.
+The statement has been terminated. 
+sql:Insert Into dbo.[UserLicense] (Id,UserId,LicenseName,StartEnd) Values (@Id,@UserId,@LicenseName,@StartEnd)(5XL9RWG6VA,U01,11,22)
+12:42:12(0); Db.UpdateDb() error: Cannot insert the value NULL into column 'Sort', table 'Hr.dbo.UserSkill'; column does not allow nulls. INSERT fails.
+The statement has been terminated. 
+sql:Insert Into dbo.[UserSkill] (Id,UserId,SkillName,SkillDesc) Values (@Id,@UserId,@SkillName,@SkillDesc)(5XL9S4VJDA,U01,11,22)

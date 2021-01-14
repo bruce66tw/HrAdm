@@ -1,0 +1,3 @@
+00:20:03(0); Db.UpdateDb() error: Cannot insert the value NULL into column 'Sort', table 'Hr.dbo.UserLicense'; column does not allow nulls. INSERT fails.
+The statement has been terminated. 
+sql:Insert Into dbo.[UserLicense] (Id,UserId,LicenseName,StartEnd) Values (@Id,@UserId,@LicenseName,@StartEnd)(5XLQHFKD3A,U01,11,22)

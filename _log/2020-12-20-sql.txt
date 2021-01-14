@@ -1,0 +1,364 @@
+00:59:12(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+00:59:13(0); 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+
+01:01:12(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+01:01:12(0); 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+
+11:54:20(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+11:54:21(0); 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+
+11:59:04(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+11:59:05(0); 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+
+11:59:06(0); 
+Select Count(*) as _count from [User] 
+11:59:06(0); 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+
+12:01:25(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:01:25(0); 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+
+12:01:27(0); 
+Select Count(*) as _count from [User] 
+12:01:27(0); 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+
+12:05:17(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:05:17(0); 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+
+12:05:18(0); 
+Select Count(*) as _count from [User] 
+12:05:18(0); 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+
+12:05:48(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:05:49(0); 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+
+12:05:50(0); 
+Select Count(*) as _count from [User] 
+12:05:50(0); 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+
+12:08:24(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:08:24(0); 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+
+12:08:24(0); 
+Select Count(*) as _count from [User] 
+12:08:24(0); 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+
+12:12:06(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:12:06(0); 
+select 
+    Code as Id, zhTW as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+
+12:12:06(0); 
+Select Count(*) as _count from [User] 
+12:12:06(0); 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+
+12:17:45(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:17:45(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+12:17:47(0); 
+Select Count(*) as _count from [User] 
+12:17:47(0); 
+select * from [User] 
+offset 0 rows fetch next 10 rows only
+
+12:31:42(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:31:42(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+12:31:43(0); 
+Select Count(*) as _count from [User] 
+12:31:43(0); 
+select * from [User] order by Id
+offset 0 rows fetch next 10 rows only
+
+12:32:10(0); Select Id,Account,Name,DeptId,Status From dbo.[User] Where Id=@_Id(U01)
+12:32:10(0); Select Id,UserId,JobName,JobType,JobPlace,StartEnd,CorpName,CorpUsers,IsManaged,JobDesc From dbo.[UserJob] Where UserId in ('U01')
+12:32:10(0); Select Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated From dbo.[UserSchool] Where UserId in ('U01')
+12:32:10(0); Select Id,UserId,Sort,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel From dbo.[UserLang] Where UserId in ('U01') Order By Sort
+12:32:10(0); Select Id,UserId,LicenseName,StartEnd,FileName From dbo.[UserLicense] Where UserId in ('U01')
+12:32:10(0); Select Id,UserId,SkillName,SkillDesc From dbo.[UserSkill] Where UserId in ('U01')
+12:38:03(0); delete dbo.[UserJob] where Id in (@Id0)(1)
+12:38:03(0); delete dbo.[UserSchool] where Id in (@Id0)(1)
+12:38:03(0); Insert Into dbo.[UserSchool] (Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated) Values (@Id,@UserId,@SchoolName,@SchoolDept,@SchoolType,@StartEnd,@Graduated)(5XL9P59V2A,U01,11,22,33,44,1)
+12:38:03(0); 
+Select Count(*) as _count from [User] 
+12:38:03(0); 
+select * from [User] order by Id
+offset 0 rows fetch next 10 rows only
+
+12:38:24(0); Select Id,Account,Name,DeptId,Status From dbo.[User] Where Id=@_Id(U01)
+12:38:24(0); Select Id,UserId,JobName,JobType,JobPlace,StartEnd,CorpName,CorpUsers,IsManaged,JobDesc From dbo.[UserJob] Where UserId in ('U01')
+12:38:24(0); Select Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated From dbo.[UserSchool] Where UserId in ('U01')
+12:38:24(0); Select Id,UserId,Sort,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel From dbo.[UserLang] Where UserId in ('U01') Order By Sort
+12:38:24(0); Select Id,UserId,LicenseName,StartEnd,FileName From dbo.[UserLicense] Where UserId in ('U01')
+12:38:24(0); Select Id,UserId,SkillName,SkillDesc From dbo.[UserSkill] Where UserId in ('U01')
+12:38:37(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:38:37(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+12:38:37(0); 
+Select Count(*) as _count from [User] 
+12:38:37(0); 
+select * from [User] order by Id
+offset 0 rows fetch next 10 rows only
+
+12:38:40(0); Select Id,Account,Name,DeptId,Status From dbo.[User] Where Id=@_Id(U01)
+12:38:40(0); Select Id,UserId,JobName,JobType,JobPlace,StartEnd,CorpName,CorpUsers,IsManaged,JobDesc From dbo.[UserJob] Where UserId in ('U01')
+12:38:40(0); Select Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated From dbo.[UserSchool] Where UserId in ('U01')
+12:38:40(0); Select Id,UserId,Sort,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel From dbo.[UserLang] Where UserId in ('U01') Order By Sort
+12:38:40(0); Select Id,UserId,LicenseName,StartEnd,FileName From dbo.[UserLicense] Where UserId in ('U01')
+12:38:40(0); Select Id,UserId,SkillName,SkillDesc From dbo.[UserSkill] Where UserId in ('U01')
+12:40:45(0); Insert Into dbo.[UserSchool] (Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated) Values (@Id,@UserId,@SchoolName,@SchoolDept,@SchoolType,@StartEnd,@Graduated)(5XL9R3JE9A,U01,11,22,33,44,1)
+12:40:45(0); 
+Select Count(*) as _count from [User] 
+12:40:46(0); 
+select * from [User] order by Id
+offset 0 rows fetch next 10 rows only
+
+12:41:09(0); Select Id,Account,Name,DeptId,Status From dbo.[User] Where Id=@_Id(U01)
+12:41:09(0); Select Id,UserId,JobName,JobType,JobPlace,StartEnd,CorpName,CorpUsers,IsManaged,JobDesc From dbo.[UserJob] Where UserId in ('U01')
+12:41:09(0); Select Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated From dbo.[UserSchool] Where UserId in ('U01')
+12:41:09(0); Select Id,UserId,Sort,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel From dbo.[UserLang] Where UserId in ('U01') Order By Sort
+12:41:09(0); Select Id,UserId,LicenseName,StartEnd,FileName From dbo.[UserLicense] Where UserId in ('U01')
+12:41:09(0); Select Id,UserId,SkillName,SkillDesc From dbo.[UserSkill] Where UserId in ('U01')
+12:41:15(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:41:15(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+12:41:15(0); 
+Select Count(*) as _count from [User] 
+12:41:15(0); 
+select * from [User] order by Id
+offset 0 rows fetch next 10 rows only
+
+12:41:17(0); Select Id,Account,Name,DeptId,Status From dbo.[User] Where Id=@_Id(U01)
+12:41:17(0); Select Id,UserId,JobName,JobType,JobPlace,StartEnd,CorpName,CorpUsers,IsManaged,JobDesc From dbo.[UserJob] Where UserId in ('U01')
+12:41:17(0); Select Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated From dbo.[UserSchool] Where UserId in ('U01')
+12:41:17(0); Select Id,UserId,Sort,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel From dbo.[UserLang] Where UserId in ('U01') Order By Sort
+12:41:17(0); Select Id,UserId,LicenseName,StartEnd,FileName From dbo.[UserLicense] Where UserId in ('U01')
+12:41:17(0); Select Id,UserId,SkillName,SkillDesc From dbo.[UserSkill] Where UserId in ('U01')
+12:41:31(0); Insert Into dbo.[UserLang] (Id,UserId,Sort,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel) Values (@Id,@UserId,@Sort,@LangName,@ListenLevel,@SpeakLevel,@ReadLevel,@WriteLevel)(5XL9RMXH3A,U01,,11,1,2,3,2)
+12:41:31(0); 
+Select Count(*) as _count from [User] 
+12:41:31(0); 
+select * from [User] order by Id
+offset 0 rows fetch next 10 rows only
+
+12:41:35(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:41:35(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+12:41:36(0); 
+Select Count(*) as _count from [User] 
+12:41:36(0); 
+select * from [User] order by Id
+offset 0 rows fetch next 10 rows only
+
+12:41:39(0); Select Id,Account,Name,DeptId,Status From dbo.[User] Where Id=@_Id(U01)
+12:41:39(0); Select Id,UserId,JobName,JobType,JobPlace,StartEnd,CorpName,CorpUsers,IsManaged,JobDesc From dbo.[UserJob] Where UserId in ('U01')
+12:41:39(0); Select Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated From dbo.[UserSchool] Where UserId in ('U01')
+12:41:39(0); Select Id,UserId,Sort,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel From dbo.[UserLang] Where UserId in ('U01') Order By Sort
+12:41:39(0); Select Id,UserId,LicenseName,StartEnd,FileName From dbo.[UserLicense] Where UserId in ('U01')
+12:41:39(0); Select Id,UserId,SkillName,SkillDesc From dbo.[UserSkill] Where UserId in ('U01')
+12:41:52(0); Insert Into dbo.[UserLicense] (Id,UserId,LicenseName,StartEnd) Values (@Id,@UserId,@LicenseName,@StartEnd)(5XL9RWG6VA,U01,11,22)
+12:41:52(0); 
+Select Count(*) as _count from [User] 
+12:41:52(0); 
+select * from [User] order by Id
+offset 0 rows fetch next 10 rows only
+
+12:41:56(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:41:56(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+12:41:57(0); 
+Select Count(*) as _count from [User] 
+12:41:57(0); 
+select * from [User] order by Id
+offset 0 rows fetch next 10 rows only
+
+12:41:59(0); Select Id,Account,Name,DeptId,Status From dbo.[User] Where Id=@_Id(U01)
+12:41:59(0); Select Id,UserId,JobName,JobType,JobPlace,StartEnd,CorpName,CorpUsers,IsManaged,JobDesc From dbo.[UserJob] Where UserId in ('U01')
+12:41:59(0); Select Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated From dbo.[UserSchool] Where UserId in ('U01')
+12:41:59(0); Select Id,UserId,Sort,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel From dbo.[UserLang] Where UserId in ('U01') Order By Sort
+12:41:59(0); Select Id,UserId,LicenseName,StartEnd,FileName From dbo.[UserLicense] Where UserId in ('U01')
+12:41:59(0); Select Id,UserId,SkillName,SkillDesc From dbo.[UserSkill] Where UserId in ('U01')
+12:42:12(0); Insert Into dbo.[UserSkill] (Id,UserId,SkillName,SkillDesc) Values (@Id,@UserId,@SkillName,@SkillDesc)(5XL9S4VJDA,U01,11,22)
+12:42:12(0); 
+Select Count(*) as _count from [User] 
+12:42:12(0); 
+select * from [User] order by Id
+offset 0 rows fetch next 10 rows only
+
+12:42:17(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+12:42:17(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+12:42:17(0); 
+Select Count(*) as _count from [User] 
+12:42:17(0); 
+select * from [User] order by Id
+offset 0 rows fetch next 10 rows only
+
+12:42:20(0); Select Id,Account,Name,DeptId,Status From dbo.[User] Where Id=@_Id(U01)
+12:42:20(0); Select Id,UserId,JobName,JobType,JobPlace,StartEnd,CorpName,CorpUsers,IsManaged,JobDesc From dbo.[UserJob] Where UserId in ('U01')
+12:42:20(0); Select Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated From dbo.[UserSchool] Where UserId in ('U01')
+12:42:20(0); Select Id,UserId,Sort,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel From dbo.[UserLang] Where UserId in ('U01') Order By Sort
+12:42:20(0); Select Id,UserId,LicenseName,StartEnd,FileName From dbo.[UserLicense] Where UserId in ('U01')
+12:42:20(0); Select Id,UserId,SkillName,SkillDesc From dbo.[UserSkill] Where UserId in ('U01')

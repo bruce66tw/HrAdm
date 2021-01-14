@@ -1,0 +1,161 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\js\base_old\**" />
+    <Content Remove="wwwroot\js\base_old\**" />
+    <EmbeddedResource Remove="wwwroot\js\base_old\**" />
+    <None Remove="wwwroot\js\base_old\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\UserController - 複製.cs" />
+    <Compile Remove="Services\UserEdit - 複製.cs" />
+    <Compile Remove="Services\UserRead - 複製.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\User\Edit - 複製.cshtml" />
+    <Content Remove="Views\User\Read - 複製.cshtml" />
+    <Content Remove="wwwroot\js\base\_check.j_old" />
+    <Content Remove="wwwroot\js\base\_datatable.j_old" />
+    <Content Remove="wwwroot\js\base\_editMany.js_old" />
+    <Content Remove="wwwroot\js\base\_formData.js" />
+    <Content Remove="wwwroot\js\base\_multi.js_old" />
+    <Content Remove="wwwroot\js\base\_text.j_old" />
+    <Content Remove="wwwroot\js\lib\zz_jquery.validate-1.19.1.js" />
+    <Content Remove="wwwroot\js\lib\zz_jquery.validate-1.19.1.min.js" />
+    <Content Remove="wwwroot\js\view\User - 複製.js" />
+    <Content Remove="wwwroot\locale\zh-TW\_BR.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Base\BaseWeb\BaseWeb.csproj" />
+    <ProjectReference Include="..\Base\Base\Base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\baseNoLine\base.css" />
+    <None Include="wwwroot\css\baseNoLine\bootstrap.css" />
+    <None Include="wwwroot\css\baseNoLine\Datatables.css" />
+    <None Include="wwwroot\css\baseNoLine\datepicker.css" />
+    <None Include="wwwroot\css\baseNoLine\fontAwesome.css" />
+    <None Include="wwwroot\css\baseNoLine\_animate.css" />
+    <None Include="wwwroot\css\baseNoLine\_btn.css" />
+    <None Include="wwwroot\css\baseNoLine\_error.css" />
+    <None Include="wwwroot\css\baseNoLine\_find.css" />
+    <None Include="wwwroot\css\baseNoLine\_form.css" />
+    <None Include="wwwroot\css\baseNoLine\_icheck.css" />
+    <None Include="wwwroot\css\baseNoLine\_idate.css" />
+    <None Include="wwwroot\css\baseNoLine\_ifile.css" />
+    <None Include="wwwroot\css\baseNoLine\_label.css" />
+    <None Include="wwwroot\css\baseNoLine\_leftmenu.css" />
+    <None Include="wwwroot\css\baseNoLine\_modal.css" />
+    <None Include="wwwroot\css\baseNoLine\_table.css" />
+    <None Include="wwwroot\css\baseNoLine\_tbar.css" />
+    <None Include="wwwroot\css\baseNoLine\_tool.css" />
+    <None Include="wwwroot\css\baseNoLine\_xg.css" />
+    <None Include="wwwroot\css\lib\bootstrap-4.4.1.css" />
+    <None Include="wwwroot\css\lib\bootstrap-4.4.1.min.css" />
+    <None Include="wwwroot\css\lib\bootstrap-datepicker-1.9.css" />
+    <None Include="wwwroot\css\lib\bootstrap-datepicker-1.9.min.css" />
+    <None Include="wwwroot\css\lib\dataTables.bootstrap4-1.10.19.css" />
+    <None Include="wwwroot\css\lib\dataTables.bootstrap4-1.10.19.min.css" />
+    <None Include="wwwroot\css\lib\datatables.css" />
+    <None Include="wwwroot\css\lib\jquery.dataTables-1.10.19.css" />
+    <None Include="wwwroot\css\lib\jquery.dataTables-1.10.19.min.css" />
+    <None Include="wwwroot\css\view\_xg_block.css_old" />
+    <None Include="wwwroot\css\view\_xp.css" />
+    <None Include="wwwroot\js\base\Datatable.js" />
+    <None Include="wwwroot\js\base\EditMany.js" />
+    <None Include="wwwroot\js\base\EditOne.js" />
+    <None Include="wwwroot\js\base\update_20181209.txt" />
+    <None Include="wwwroot\js\base\_ajax.js" />
+    <None Include="wwwroot\js\base\_array.js" />
+    <None Include="wwwroot\js\base\_assert.js" />
+    <None Include="wwwroot\js\base\_browser.js" />
+    <None Include="wwwroot\js\base\_formData.js" />
+    <None Include="wwwroot\js\base\_btn.js" />
+    <None Include="wwwroot\js\base\_chart.js" />
+    <None Include="wwwroot\js\base\_crud.js" />
+    <None Include="wwwroot\js\base\_edit.js" />
+    <None Include="wwwroot\js\base\_error.js" />
+    <None Include="wwwroot\js\base\_form.js" />
+    <None Include="wwwroot\js\base\_fun.js" />
+    <None Include="wwwroot\js\base\_helper.js" />
+    <None Include="wwwroot\js\base\_ibase.js" />
+    <None Include="wwwroot\js\base\_icheck.js" />
+    <None Include="wwwroot\js\base\_icolor.js" />
+    <None Include="wwwroot\js\base\_idate.js" />
+    <None Include="wwwroot\js\base\_ifile.js" />
+    <None Include="wwwroot\js\base\_ihtml.js" />
+    <None Include="wwwroot\js\base\_input.js" />
+    <None Include="wwwroot\js\base\_iradio.js" />
+    <None Include="wwwroot\js\base\_iread.js" />
+    <None Include="wwwroot\js\base\_iselect.js" />
+    <None Include="wwwroot\js\base\_itext.js" />
+    <None Include="wwwroot\js\base\_itextarea.js" />
+    <None Include="wwwroot\js\base\_json.js" />
+    <None Include="wwwroot\js\base\_leftmenu.js" />
+    <None Include="wwwroot\js\base\_locale.js" />
+    <None Include="wwwroot\js\base\_log.js" />
+    <None Include="wwwroot\js\base\_modal.js" />
+    <None Include="wwwroot\js\base\_nav.js" />
+    <None Include="wwwroot\js\base\_num.js" />
+    <None Include="wwwroot\js\base\_obj.js" />
+    <None Include="wwwroot\js\base\_pjax.js" />
+    <None Include="wwwroot\js\base\_prog.js" />
+    <None Include="wwwroot\js\base\_qrcode.js" />
+    <None Include="wwwroot\js\base\_str.js" />
+    <None Include="wwwroot\js\base\_switch.js" />
+    <None Include="wwwroot\js\base\_tab.js" />
+    <None Include="wwwroot\js\base\_table.js" />
+    <None Include="wwwroot\js\base\_tool.js" />
+    <None Include="wwwroot\js\base\_valid.js" />
+    <None Include="wwwroot\js\base\_var.js" />
+    <None Include="wwwroot\js\lib\bootstrap-datepicker-1.9.js" />
+    <None Include="wwwroot\js\lib\bootstrap-datepicker-1.9.min.js" />
+    <None Include="wwwroot\js\lib\bootstrap.bundle-4.4.1.js" />
+    <None Include="wwwroot\js\lib\bootstrap.bundle-4.4.1.min.js" />
+    <None Include="wwwroot\js\lib\dataTables.bootstrap4-1.10.19.js" />
+    <None Include="wwwroot\js\lib\dataTables.bootstrap4-1.10.19.min.js" />
+    <None Include="wwwroot\js\lib\jquery-3.4.1.js" />
+    <None Include="wwwroot\js\lib\jquery-3.4.1.min.js" />
+    <None Include="wwwroot\js\lib\jquery.dataTables-1.10.19.js" />
+    <None Include="wwwroot\js\lib\jquery.dataTables-1.10.19.min.js" />
+    <None Include="wwwroot\js\lib\jquery.pjax-2.0.1.js" />
+    <None Include="wwwroot\js\lib\jquery.pjax-2.0.1.min.js" />
+    <None Include="wwwroot\js\lib\jquery.validate.unobtrusive-3.2.11.js" />
+    <None Include="wwwroot\js\lib\jquery.validate.unobtrusive-3.2.11.min.js" />
+    <None Include="wwwroot\js\lib\jsplumb-2.12.js" />
+    <None Include="wwwroot\js\lib\jsplumb-2.12.min.js" />
+    <None Include="wwwroot\js\lib\modernizr-2.8.3.js" />
+    <None Include="wwwroot\js\lib\modernizr-2.8.3.min.js" />
+    <None Include="wwwroot\js\lib\moment-2.24.js" />
+    <None Include="wwwroot\js\lib\moment-2.24.min.js" />
+    <None Include="wwwroot\js\lib\mustache-3.1.js" />
+    <None Include="wwwroot\js\lib\mustache-3.1.min.js" />
+    <None Include="wwwroot\locale\zh-TW\_BR.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\locale\zh-TW\BR.json">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties bundleconfig_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>

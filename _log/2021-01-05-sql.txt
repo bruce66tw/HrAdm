@@ -1,0 +1,70 @@
+09:26:31(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+09:26:31(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+09:26:33(0); 
+Select Count(*) as _count from [User] u
+join [Dept] d on u.DeptId=d.Id 
+09:26:33(0); 
+select u.*, d.name as DeptName from [User] u
+join [Dept] d on u.DeptId=d.Id order by u.Id
+offset 0 rows fetch next 10 rows only
+
+09:26:36(0); Select Id,Account,Name,DeptId,Status From dbo.[User] Where Id=@_Id(U01)
+09:26:36(0); Select Id,UserId,JobName,JobType,JobPlace,StartEnd,CorpName,CorpUsers,IsManaged,JobDesc From dbo.[UserJob] Where UserId in ('U01')
+09:26:36(0); Select Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated From dbo.[UserSchool] Where UserId in ('U01')
+09:26:36(0); Select Id,UserId,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel,Sort From dbo.[UserLang] Where UserId in ('U01') Order By Sort
+09:26:36(0); Select Id,UserId,LicenseName,StartEnd,FileName From dbo.[UserLicense] Where UserId in ('U01')
+09:26:36(0); Select Id,UserId,SkillName,SkillDesc,Sort From dbo.[UserSkill] Where UserId in ('U01')
+09:26:58(0); Update dbo.[UserLicense] Set LicenseName=@LicenseName Where Id=@_Id(11a,5XTM6SN9FA)
+09:27:03(0); 
+Select Count(*) as _count from [User] u
+join [Dept] d on u.DeptId=d.Id 
+09:27:03(0); 
+select u.*, d.name as DeptName from [User] u
+join [Dept] d on u.DeptId=d.Id order by u.Id
+offset 0 rows fetch next 10 rows only
+
+09:32:54(0); 
+select 
+    Id, Name as Str
+from dbo.[Dept]
+order by Id
+
+09:32:54(0); 
+select 
+    Code as Id, Name as Str
+from dbo._Code
+where Type='LangLevel'
+order by Sort
+09:32:56(0); 
+Select Count(*) as _count from [User] u
+join [Dept] d on u.DeptId=d.Id 
+09:32:56(0); 
+select u.*, d.name as DeptName from [User] u
+join [Dept] d on u.DeptId=d.Id order by u.Id
+offset 0 rows fetch next 10 rows only
+
+09:32:57(0); Select Id,Account,Name,DeptId,Status From dbo.[User] Where Id=@_Id(U01)
+09:32:58(0); Select Id,UserId,JobName,JobType,JobPlace,StartEnd,CorpName,CorpUsers,IsManaged,JobDesc From dbo.[UserJob] Where UserId in ('U01')
+09:32:58(0); Select Id,UserId,SchoolName,SchoolDept,SchoolType,StartEnd,Graduated From dbo.[UserSchool] Where UserId in ('U01')
+09:32:58(0); Select Id,UserId,LangName,ListenLevel,SpeakLevel,ReadLevel,WriteLevel,Sort From dbo.[UserLang] Where UserId in ('U01') Order By Sort
+09:32:58(0); Select Id,UserId,LicenseName,StartEnd,FileName From dbo.[UserLicense] Where UserId in ('U01')
+09:32:58(0); Select Id,UserId,SkillName,SkillDesc,Sort From dbo.[UserSkill] Where UserId in ('U01')
+09:33:10(0); Update dbo.[UserLicense] Set LicenseName=@LicenseName Where Id=@_Id(11ab,5XTM6SN9FA)
+09:33:12(0); 
+Select Count(*) as _count from [User] u
+join [Dept] d on u.DeptId=d.Id 
+09:33:12(0); 
+select u.*, d.name as DeptName from [User] u
+join [Dept] d on u.DeptId=d.Id order by u.Id
+offset 0 rows fetch next 10 rows only
+
