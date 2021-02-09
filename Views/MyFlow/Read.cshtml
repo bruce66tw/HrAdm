@@ -1,0 +1,277 @@
+﻿@{
+    var cols = "4,6";
+}
+
+<!--
+<link href="~/css/lib/jsPlumb/jsplumbtoolkit-demo.css" rel="stylesheet">
+-->
+<link href="~/css/lib/jsPlumb/jsplumbtoolkit-defaults.css" rel="stylesheet">
+<style>
+    .xp-prog {
+        height: 100%;
+        width: 98%;
+        padding: 0 !important;
+        /*padding: 2px;*/
+    }
+
+        .xp-prog.xu-hide {
+            border: none !important;
+            margin: 0;
+            padding: 0;
+        }
+
+    #divRead {
+        margin: 15px !important;
+    }
+
+    #divEdit {
+        width: 100%;
+        height: 100%;
+        /*margin: 10px 30px;*/
+        /*border-radius: 3px;*/
+    }
+
+    #zz_divEdit {
+        /*background-color: transparent;*/
+        font-family: Arial,sans-serif;
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+        max-width: 1500px;
+        position: relative;
+        margin-top: 20px;
+        /*margin-left: 160px;*/
+        height: 750px;
+        max-height: 700px;
+        border: 1px solid #CCC;
+        background-color: white;
+    }
+
+    #eform {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        z-index: 1;
+    }
+
+    #zz_divFlowBox {
+        width: 100%;
+        height: 100%;
+        /*z-index: -100;*/
+    }
+
+    .xu-text {
+        width: 180px;
+        margin: 5px;
+    }
+
+    .xu-fun {
+        border: solid 1px #c3c3c3;
+    }
+
+    .xu-col2 {
+        width: 49%;
+    }
+
+    .xu-col3 {
+        width: 32%;
+    }
+</style>
+
+<script src="~/js/lib/jsplumb.js"></script>
+<script src="~/js/view/MyFlow.js"></script>
+<script type="text/javascript">
+    $(function () {
+        _me.init();
+    });
+</script>
+
+<div class="row">
+    <div class="col-md-6">
+        @await Component.InvokeAsync("XgProgPath", new { names = new string[] { "流程維護" } })
+    </div>
+    <div class="col-md-6" id="divEditTbar" style="padding-top: 6px; display:none">
+        @await Component.InvokeAsync("XgSaveBack", new { align = "right" })
+    </div>
+</div>
+<div class="xp-prog">
+    <!-- read form -->
+    <div id="divRead" class="xg-swap xg-active">
+        <form id='rform' class='xg-form' style="margin-bottom:0;">
+            <div class="row">
+                @await Component.InvokeAsync("XiText", new { title = "流程名稱", fid = "Name", maxLen = 30, inRow = true })
+                @await Component.InvokeAsync("XgFindTbar")
+            </div>
+        </form>
+
+        <div class='xg-btns-box'>
+            @await Component.InvokeAsync("XgCreate")
+        </div>
+        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>流程代碼</th>
+                    <th>流程名稱</th>
+                    <th>資料狀態</th>
+                    <th>維護</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- edit form -->
+    <div id="divEdit" class="xg-swap jtk-surface jtk-surface-nopan">
+        <form id='eform' class='xg-form'>
+            @await Component.InvokeAsync("XiHide", new { fid = "Id" })
+            @await Component.InvokeAsync("XiText", new { fid = "Code", maxLen = 20, required = true, extClass = "xu-text", inputTip = "流程代碼" })
+            @await Component.InvokeAsync("XiText", new { fid = "Name", maxLen = 30, required = true, extClass = "xu-text", inputTip = "流程名稱" })
+
+            <div class="btn-group-vertical" role="group" style="margin-left: 5px;" aria-label="button group vertical">
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddStartNode()" title="New Start Node">Start</button>
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddNormalNode()" title="New Node">Node</button>
+                @*<button type="button" class="btn btn-default xu-fun" onclick="_me.onAutoNode()" title="New Auto Node">Auto</button>*@
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddEndNode()" title="New End Node">End</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- context menu for node & line -->
+<ul class='xf-menu'>
+    <li onclick="_me.flow.onMenuEdit()">Edit</li>
+    <li onclick="_me.flow.onMenuDelete()">Delete</li>
+</ul>
+
+<!-- flow node template, _isnew(lower case !!), _key are need !! -->
+<script id="tplNode" type="text/template">
+    <div data-shape="Circle"
+         class="xf-node {{_NodeClass}}" style="left:{{PosX}}px; top:{{PosY}}px;">
+
+        @await Component.InvokeAsync("XiHide", new { fid = "Id" })
+        @await Component.InvokeAsync("XiHide", new { fid = "FlowId" })
+        @await Component.InvokeAsync("XiHide", new { fid = "Name" })
+        @await Component.InvokeAsync("XiHide", new { fid = "NodeType" })
+        @await Component.InvokeAsync("XiHide", new { fid = "EditForm" })
+        @await Component.InvokeAsync("XiHide", new { fid = "LimitTime" })
+        @await Component.InvokeAsync("XiHide", new { fid = "TimeUnit" })
+        @await Component.InvokeAsync("XiHide", new { fid = "OverAct" })
+        @await Component.InvokeAsync("XiHide", new { fid = "PosX" })
+        @await Component.InvokeAsync("XiHide", new { fid = "PosY" })
+        @*
+            @await Component.InvokeAsync("XiHide", new { fid = "Height" })
+            @await Component.InvokeAsync("XiHide", new { fid = "Width" })
+        *@
+        @await Component.InvokeAsync("XiHide", new { fid = "SignerType" })
+        @await Component.InvokeAsync("XiHide", new { fid = "SignerId" })
+
+        {{Name}}
+        <!-- flow end point -->
+        <div class="xf-ep" action="begin"></div>
+    </div>
+</script>
+
+<!-- flow lines container, hide -->
+<div id="divLinesBox" style="display:none"></div>
+
+<!-- flow line template -->
+<script id="tplLine" type="text/template">
+    <div class="xd-line">
+        @await Component.InvokeAsync("XiHide", new { fid = "Id" })
+        @await Component.InvokeAsync("XiHide", new { fid = "FlowId" })
+        @*await Component.InvokeAsync("XiHide", new { fid = "Name" })*@
+        @await Component.InvokeAsync("XiHide", new { fid = "CondStr" })
+        @await Component.InvokeAsync("XiHide", new { fid = "StartNode" })
+        @await Component.InvokeAsync("XiHide", new { fid = "EndNode" })
+        @await Component.InvokeAsync("XiHide", new { fid = "IsAgree" })
+        @await Component.InvokeAsync("XiHide", new { fid = "PassType" })
+        @await Component.InvokeAsync("XiHide", new { fid = "PassNum" })
+        @await Component.InvokeAsync("XiHide", new { fid = "Sort" })
+    </div>
+</script>
+
+<!-- node property modal -->
+<div id="modalNodeProp" class="modal fade xg-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Node Property</div>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="eformNode" class="form-horizontal xg-form" style="padding:5px 20px;">
+                    @*Html.XiLabel("NodeTypeName", "", "Node Type :", 8)*@
+                    @await Component.InvokeAsync("XiSelect", new { title = "Node Type :", fid = "NodeType", rows = (List<IdStrDto>)ViewBag.NodeTypes, cols = cols })
+                    @await Component.InvokeAsync("XiText", new { title = "Node Name :", fid = "Name", maxLen = 20, required = true, cols = cols })
+                    @await Component.InvokeAsync("XiSelect", new { title = "Signer Type :", fid = "SignerType", rows = (List<IdStrDto>)ViewBag.SignerTypes, cols = cols })
+                    @await Component.InvokeAsync("XiText", new { title = "Signer Value :", fid = "SignerValue", maxLen = 30, cols = cols })
+
+                    @*
+                        @Html.XiSelect("NodeType", "", (List<IdStrDto>)ViewBag.NodeTypes, "Node Type :", true, cols, new PropSelectDto() { AddEmptyRow = false })
+                        @Html.XiText("Name", "", "Node Name :", 20, true, cols: cols)
+                        @Html.XiSelect("SignerType", "", (List<IdStrDto>)ViewBag.SignerTypes, "Signer Type :", false, cols)
+                        @Html.XiText("SignerValue", "", "Signer Value :", cols: cols)
+                    *@
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="_me.flow.onModalNodeOk()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- line property modal -->
+<div id="modalLineProp" class="modal fade xg-modal" role="dialog">
+    <div class="modal-dialog" style="max-width:620px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Line Property</div>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="eformLine" class="form-horizontal xg-form" style="padding:5px 20px;">
+                    @await Component.InvokeAsync("XiRead", new { title = "Start Node :", fid = "StartNode", cols = cols })
+                    @await Component.InvokeAsync("XiRead", new { title = "End Node :", fid = "EndNode", cols = cols })
+                    @await Component.InvokeAsync("XiNum", new { title = "Run Order :", fid = "Sort", required = true, cols = cols })
+                    @*Html.XiNum("Sort", "", "Run Order :", true, cols, new PropNumModel() { IsDigit = true, MaxValue = 10, Width = "80px" })*@
+                    @*Html.XiRadios("LineType", "0", "執行種類 :", (List<IdStrDto>)ViewBag.LineTypes, 9)*@
+                    <div id="divLineCondBox" class="row xg-row">
+                        <div class="col-md-12 col-sm-12 xg-label" style="margin-bottom: 5px;">
+                            執行條件
+                            <button type="button" class="btn btn-primary" onclick="_me.flow.onAddLineCond()">新增一列</button>
+                        </div>
+                        <table class="table table-bordered xg-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th width="104px" class="text-center"></th>
+                                    <th>欄位名稱</th>
+                                    <th width="103px">運算</th>
+                                    <th width="60px">欄位值</th>
+                                    <th width="85px"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="divLineConds"></tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="_me.flow.onModalLineOk()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="tplLineCond" type="text/template">
+    <tr>
+        <td>@await Component.InvokeAsync("XiSelect", new { fid = "AndOr", value = "{{AndOr}}", rows = (List<IdStrDto>)ViewBag.AndOrs, inRow = true })</td>
+        <td>@await Component.InvokeAsync("XiText", new { fid = "Fid", value = "{{Fid}}", maxLen = 30, inRow = true })</td>
+        <td>@await Component.InvokeAsync("XiSelect", new { fid = "Op", value = "{{Op}}", rows = (List<IdStrDto>)ViewBag.LineOps, inRow = true })</td>
+        <td>@await Component.InvokeAsync("XiText", new { fid = "Value", value = "{{Value}}", maxLen = 30, inRow = true })</td>
+        <td width='100px' class='text-center'>@await Component.InvokeAsync("XgDeleteUpDown", new { fnDeleteRow = "_me.flow.onDeleteLineCond(this)" })</td>
+
+    </tr>
+</script>

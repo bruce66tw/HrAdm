@@ -3,7 +3,7 @@ var _BR = {
 
     //=== for moment.js ===
     DateEditFormat: 'YYYY/MM/DD',
-    DateShowFormat: 'YYYY年MM月DD日',
+    //DateShowFormat: 'YYYY年MM月DD日',
     DtFormat: 'YYYY/MM/DD HH:mm:ss',
     //no second
     DtFormat2: 'YYYY/MM/DD HH:mm',

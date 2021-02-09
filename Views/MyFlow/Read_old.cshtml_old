@@ -1,0 +1,195 @@
+﻿@using Base.Models
+@using Base.Services
+@using Resources
+@using R = Resources.Flow
+
+<link href="~/Content/jsPlumb/jsplumbtoolkit-defaults.css" rel="stylesheet">
+<link href="~/Content/view/Flow.css" rel="stylesheet">
+<style>
+    .xp-prog {
+        height: 100%;
+        width: 95%;
+        /*padding: 2px;*/
+    }
+
+        .xp-prog.xu-hide {
+            border: none !important;
+            margin: 0;
+            padding: 0;
+        }
+
+    #divEdit {
+        width: 100%;
+        height: 100%;
+        margin: 10px 30px;
+        border-radius: 3px;
+    }
+
+    #divEditTool {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        z-index: 1;
+    }
+
+    #divFlowBox {
+        width: 100%;
+        height: 100%;
+        /*z-index: -100;*/
+    }
+
+    .xu-text {
+        width: 180px;
+        margin: 5px;
+    }
+
+    .xu-fun {
+        border: solid 1px #c3c3c3;
+    }
+</style>
+
+@* section script not work here !! *@
+<script src="~/Scripts/jsplumb.js"></script>
+<script src="~/Scripts/view/MyFlow.js"></script>
+<script type="text/javascript">
+    //debugger;
+    //jquery ready not work here for pjax !!
+    /*
+    document.addEventListener('DOMContentLoaded', function () {
+        debugger;
+        init();
+        //
+        //_me.init();
+    });
+    */
+    /*
+    */
+    $(function () {
+        debugger;
+        /*
+        var timer = setInterval(function () {
+            clearInterval(timer);
+            // code here
+            init();
+        }, 200);
+        */
+        //_time.s
+
+        _me.init();
+
+        //node types: pass list object from c# to javascript
+        //_me.nodeTypes = _json.strToArray('Html.Raw(_Model.ListToStr(ViewBag.NodeTypes))');
+        _me.R = {
+            StartNodeExist: "@R.StartNodeExist",
+        };
+    });
+
+    /*
+    function init() {
+        debugger;
+        _me.init();
+
+        //node types: pass list object from c# to javascript
+        //_me.nodeTypes = _json.strToArray('Html.Raw(_Model.ListToStr(ViewBag.NodeTypes))');
+        //_me.R = {
+        //};
+    }
+    //});
+    */
+
+</script>
+
+<div class="row">
+    <div class="col-md-6 xg-left">
+        @Html.XgReadTitle(R0.MainFun, R0.FlowMng)
+    </div>
+    <div id="divEditBtn" class="col-md-6 xg-right" style="display:none; padding-right:48px; padding-top:5px;">
+        <button type="button" class="btn btn-default" onclick="_me.setMode('R')">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="_me.onSave()">Save</button>
+    </div>
+</div>
+<div class="xp-prog">
+    <div id="divRead" class="xg-swap xg-active">
+        <!--toolbar-->
+        <div class="col-md-12 col-sm-12 col-xs-12 xp-toolbar xg-right">
+            @Html.XgCreate()
+        </div>
+
+        <!--table-->
+        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>@R.Name</th>
+                    <th>@R.ShowName</th>
+                    <th width='80px'>@R0.Fun</th>
+                    <th width='60px'>@R0.Status</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- edit form -->
+    <div id="divEdit" class="xg-swap">
+        <div id="divEditTool">
+            @Html.XiHide("Id")
+            <input type="text" id="Name" class="form-control xu-text" placeholder="Flow Name" />
+            <input type="text" id="ShowName" class="form-control xu-text" placeholder="Show Name" />
+            <div class="btn-group-vertical" role="group" style="margin-left: 5px;" aria-label="button group vertical">
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.onStartNode()" title="New Start Node">Start</button>
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.onNormalNode()" title="New Node">Node</button>
+                @*<button type="button" class="btn btn-default xu-fun" onclick="_me.onAutoNode()" title="New Auto Node">Auto</button>*@
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.onEndNode()" title="New End Node">End</button>
+            </div>
+        </div>
+        <div id="divFlowBox" class="jtk-surface jtk-surface-nopan">
+        </div>
+    </div>
+</div>
+
+<!-- node/line property -->
+@Html.Partial("NodeProp")
+@Html.Partial("LineProp")
+
+<!-- context menu for node & line -->
+<ul class='xg-context-menu'>
+    <li onclick="_me.onMenuEdit()">Edit</li>
+    <li onclick="_me.onMenuDelete()">Delete</li>
+</ul>
+
+<!-- flow node template, _isnew(lower case !!), _key are need !! -->
+<script id="tplNode" type="text/template">
+    <div data-shape="Circle"
+         style="left:{{X}}px; top:{{Y}}px;"
+         class="xf-node {{_NodeClass}}"
+         data-_key="{{Id}}">
+        {{Name}}
+        <div class="xf-ep" action="begin"></div>
+    </div>
+</script>
+
+@{
+    var selectProp = new PropSelectDto() { IsId = false, AddEmptyRow = false };
+    var textProp = new PropTextDto() { IsId = false };
+}
+<script id="tplLineCond" type="text/template">
+    <tr>
+        <td>
+            @Html.XiSelect("AndOr", "{{AndOr}}", (List<IdStrDto>)ViewBag.AndOrs, prop: selectProp)
+        </td>
+        <td>
+            @Html.XiText("Fid", "{{Fid}}", prop: textProp)
+        </td>
+        <td>
+            @Html.XiSelect("Op", "{{Op}}", (List<IdStrDto>)ViewBag.Ops, prop: selectProp)
+        </td>
+        <td>
+            @Html.XiText("Value", "{{Value}}", prop: textProp)
+        </td>
+        <td>
+            <i class='fa fa-times' onclick="_me.onDeleteLineCond(this)"></i>
+            <i class='fa fa-chevron-up' onclick="_table.rowMoveUp(this)"></i>
+            <i class='fa fa-chevron-down' onclick="_table.rowMoveDown(this)"></i>
+        </td>
+    </tr>
+</script>

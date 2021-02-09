@@ -7,7 +7,7 @@ var _obj = {
      * get object by name for input field
      */
     get: function (val, box) {
-        return _obj.getF('[data-fid=' + val + ']', box);
+        return _obj.getF(_fun.getFidFilter(val), box);
     },
 
     /**
@@ -79,7 +79,7 @@ var _obj = {
      * check object existed or not
      */
     isExist: function (obj) {
-        return (obj.length > 0);
+        return (obj !== undefined && obj !== null && obj.length > 0);
     },
 
     /**

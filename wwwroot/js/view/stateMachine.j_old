@@ -1,0 +1,263 @@
+
+var _stateMachine = {
+    flow: null,
+    filter: '#divCanvas .xf-node',  //filter to find nodes
+    canvas: document.getElementById("divCanvas"),  //container
+    //nodes: jsPlumb.getSelector("#divCanvas .xf-node"),  //node elements
+    nodes: null,    //從後端傳來的 node array
+    lines: null,    //從後端傳來的 line array
+    nodeMap: {},
+    lineMap: {},
+
+    isNowNode: false,   //true:目前選取 node, false:目前選取line
+    nowElement: null,   //目前選取的物件
+
+    //在初始化函數使用 this
+    //lineList: json array 字串
+    init: function (nodeList, lineList) {
+        //set instance variables
+        this.nodes = JSON.parse(nodeList);
+        this.lines = JSON.parse(lineList);
+
+        //建立id-no的對應 for nodes & lines
+        for (var i=0; i<this.nodes.length; i++) 
+            this.nodeMap['node'+this.nodes[i].Sn] = i;
+        for (var i = 0; i < this.lines.length; i++)
+            this.lineMap['node' + this.lines[i].FromSn + '_node' + this.lines[i].ToSn] = i;
+
+        //get flow
+        this.flow = window.jsp = this.getFlow();
+        var flow = this.flow;
+
+        //設定一個連接線 basic 的 sytle 
+        flow.registerConnectionType("basic", {
+            anchor: "Continuous",
+            connector: "StateMachine"
+        });
+
+        // make all the window divs draggable
+        //flow.draggable(jsPlumb.getSelector(".flowchart-demo .window"), { grid: [20, 20] });
+        // THIS DEMO ONLY USES getSelector FOR CONVENIENCE. Use your library's appropriate selector
+        // method, or document.querySelectorAll:
+        //jsPlumb.draggable(document.querySelectorAll(".window"), { grid: [20, 20] });
+
+        //先註冊事件, 因為 render 時會 trigger
+        this.setEvent(this);
+
+        //draw
+        this.batch(this);
+
+        //init
+        _init.initCheck();
+        _init.initSelect();
+        //remark it: 似乎無作用 !!
+        //jsPlumb.fire("jsPlumbDemoLoaded", flow);
+    },
+
+    //register event
+    setEvent: function (me) {
+        var flow = me.flow;
+
+        // bind a click listener to each connection; the connection is deleted. you could of course
+        // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
+        // happening.
+        //(定義)Notification a Connection was clicked.
+        flow.bind("click", function (c) {
+            //flow.detach(c);
+            //console.log('click');
+            _stateMachine.showNodeProp();
+        });
+
+        //line(connection) 顯示右鍵功能表
+        flow.bind("contextmenu", function (c, ev) {
+            //window.event.returnValue = false;
+            //alert('right click');
+            _stateMachine.isNowNode = false;
+            _stateMachine.nowElement = c;
+            _stateMachine.showContextMenu('.xg-context-menu', ev);
+        });
+
+        // bind a connection listener. note that the parameter passed to this function contains more than
+        // just the new connection - see the documentation for a full list of what is included in 'info'.
+        // this listener sets the connection's internal
+        // id as the label overlay's text.        
+        flow.bind("connection", function (info) {
+            var lineNo = _stateMachine.lineMap[info.sourceId + '_' + info.targetId];
+            var line = _stateMachine.lines[lineNo];
+            var label = (line.Op == 'else') ? line.Op : (line.OrderNo + '.' + line.Fid + _stateMachine.opToStr(line.Op) + line.Value);
+            info.connection.getOverlay("label").setLabel(label);
+        });
+        
+        // click listener for the enable/disable link in the source box (the blue one).
+        jsPlumb.on(".xf-node", "contextmenu", function (ev) {
+            _stateMachine.isNowNode = true;
+            _stateMachine.nowElement = ev.target;
+            _stateMachine.showContextMenu('.xg-context-menu', ev);
+
+            /*
+            var sourceDiv = (e.target || e.srcElement).parentNode;
+            var state = instance.toggleSourceEnabled(sourceDiv);
+            this.innerHTML = (state ? "disable" : "enable");
+            jsPlumb[state ? "removeClass" : "addClass"](sourceDiv, "element-disabled");
+            jsPlumbUtil.consume(e);
+            */
+        });
+
+        //??
+        // bind a double click listener to "canvas"; add new node when this occurs.
+        jsPlumb.on(me.canvas, "dblclick", function (e) {
+            _stateMachine.newNode(e.offsetX, e.offsetY);
+        });
+
+        //hide context menu(jsPlumb 沒有提供 mousedown event !!)
+        $(document).bind("mousedown", function (e) {
+            var filter = '.xg-context-menu';
+            if (!$(e.target).parents(filter).length > 0)
+                $(filter).hide(100);
+        });
+    },
+
+    //be public function !!
+    showContextMenu: function (filter, event) {
+        // Avoid the real one
+        event.preventDefault();
+
+        // Show contextmenu
+        $(filter).finish()
+            .toggle(100)
+            .css({
+                top: event.pageY + "px",
+                left: event.pageX + "px"
+            });
+    },
+
+    onClickEdit: function () {
+        if (_stateMachine.isNowNode)
+            _stateMachine.showNodeProp();
+        else
+            _stateMachine.showLineProp();
+    },
+
+    //return flow instance
+    getFlow: function () {
+        return jsPlumb.getInstance({
+            Endpoint: ["Dot", { radius: 2 }],
+            Connector: "StateMachine",
+            HoverPaintStyle: { stroke: "#1e8151", strokeWidth: 2 },
+            ConnectionOverlays: [
+                ["Arrow", {
+                    location: 1,
+                    id: "arrow",
+                    width: 8,
+                    length: 10,
+                    foldback: 0.8,
+                }],
+                ["Label", { label: "FOO", id: "label", cssClass: "xf-line-label" }]
+            ],
+            Container: "canvas"
+        });
+    },
+
+    //suspend drawing and initialise.
+    batch: function (me) {
+        //建立節點
+        //var nodes = me.nodes;
+        var nodes = jsPlumb.getSelector(me.filter);
+        var flow = me.flow;
+        for (var i = 0; i < nodes.length; i++) {
+            me.initNode(flow, nodes[i], true);
+        }
+        /*
+        */
+
+        //連接節點        
+        for (var i = 0; i < me.lines.length; i++) {
+            //element 前面有 node, 欄位名稱配合後端 LineModel
+            var line = me.lines[i];
+            flow.connect(
+                { source: 'node' + line.FromSn, target: 'node' + line.ToSn, type: "basic" }
+                //{ orderNo: line.OrderNo, op: line.Op }
+            );
+        }
+    },
+
+    //初始化節點
+    initNode: function(flow, el) {
+        // initialise draggable elements.
+        //var flow = _stateMachine.flow;
+        flow.draggable(el);
+
+        //設定 source 屬性
+        flow.makeSource(el, {
+            filter: ".xf-ep",
+            anchor: "Continuous",
+            //outlineWidth 無作用 !!
+            connectorStyle: { stroke: "#5c96bc", strokeWidth: 2, outlineStroke: "transparent", outlineWidth: 3 },
+            connectionType:"basic",
+            extract:{
+                "action":"the-action"
+            },
+            maxConnections: 50,
+            /*
+            onMaxConnections: function (info, e) {
+                alert("Maximum connections (" + info.maxConnections + ") reached");
+            }
+            */
+        });
+
+        //設定 target 屬性
+        flow.makeTarget(el, {
+            dropOptions: { hoverClass: "dragHover" },
+            anchor: "Continuous",
+            allowLoopback: true
+        });
+
+        //產生節點, remark it: 似乎無作用 !!
+        // this is not part of the core demo functionality; it is a means for the Toolkit edition's wrapped
+        // version of this demo to find out about new nodes being added.
+        //flow.fire("jsPlumbDemoNodeAdded", el);
+    },
+
+    //create new node
+    newNode: function(x, y) {
+        var d = document.createElement("div");
+        var id = jsPlumbUtil.uuid();
+        d.className = "xf-node";
+        d.id = id;
+        //d.innerHTML = id.substring(0, 7) + "<div class=\"xf-ep\"></div>";
+        d.innerHTML = id.substring(0, 7) + "<div class='xf-ep'></div>";
+        d.style.left = x + "px";
+        d.style.top = y + "px";
+        _stateMachine.flow.getContainer().appendChild(d);
+        _stateMachine.initNode(_stateMachine.flow, d);
+        return d;
+    },
+
+    //convert line operator to display string
+    opToStr: function (op) {
+        if (op == 'eq')
+            return ' = ';
+        else if (op == 'neq')
+            return ' != ';
+        else if (op == 'gt')
+            return ' > ';
+        else if (op == 'ge')
+            return ' >= ';
+        else if (op == 'st')
+            return ' < ';
+        else if (op == 'se')
+            return ' <= ';
+        else 
+            return ' ' + op + ' ';
+    },
+
+    //show property window
+    showNodeProp: function () {
+        $('#divNodeProp').modal('show');
+    },
+    showLineProp: function () {
+        $('#divLineProp').modal('show');
+    },
+
+}; //class
+

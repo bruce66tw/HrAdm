@@ -25,18 +25,26 @@ namespace HrAdm
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //use pascal case json
+            //use newtonSoft for json serialize for controller
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    //use pascal case json
+                    options.UseMemberCasing();
+                });
+
             services.AddControllersWithViews()
                 .AddJsonOptions(options =>
                 {
+                    //use pascal case json
                     options.JsonSerializerOptions.PropertyNamingPolicy = null;
                 });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            //locale info & user info for base component
-            services.AddSingleton<IBaseResourceService, BaseResourceService>();
-            services.AddSingleton<IBaseUserInfoService, BaseUserInfoService>();
+            //locale & user info for base component
+            services.AddSingleton<IBaseResService, BaseResService>();
+            services.AddScoped<IBaseUserService, MyBaseUserService>();
 
             //session1(memory cache)
             services.AddDistributedMemoryCache();
@@ -52,12 +60,13 @@ namespace HrAdm
             Configuration.GetSection("FunConfig").Bind(config);
             _Fun.Config = config;
 
-            //database abstract class
+            //ado.net for mssql
             services.AddTransient<DbConnection, SqlConnection>();
             services.AddTransient<DbCommand, SqlCommand>();
 
+            //initial _Fun by mssql
             IServiceProvider di = services.BuildServiceProvider();
-            _Fun.Init(di, DbTypeEnum.MSSql);
+            _Fun.Init(di, DbTypeEnum.MSSql, AuthTypeEnum.Ctrl);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,6 +94,7 @@ namespace HrAdm
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                    //pattern: "{controller=MyFlow}/{action=Read}/{id?}");
             });
         }
     }

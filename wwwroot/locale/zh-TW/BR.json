@@ -15,5 +15,8 @@
 
   "FrontDateFormat": "yyyy/M/d",
   "PlsSelect": "-請選取-",
-  "TipDeleteRow": "刪除此筆資料"
+  "TipDeleteRow": "刪除此筆資料",
+
+  "NoProgAuth": "您沒有此功能的權限，請聯絡管理者。",
+  "NotLogin": "您尚未登入系統。"
 }

@@ -1,0 +1,169 @@
+﻿@{
+    var cols = "4,6";
+}
+
+<!--
+<link href="~/css/lib/jsPlumb/jsplumbtoolkit-defaults.css" rel="stylesheet">
+-->
+<link href="~/css/lib/jsPlumb/jsplumbtoolkit-demo.css" rel="stylesheet">
+<link href="~/css/view/MyFlow.css" rel="stylesheet">
+<style>
+    .xp-prog {
+        height: 100%;
+        width: 95%;
+        /*padding: 2px;*/
+    }
+
+        .xp-prog.xu-hide {
+            border: none !important;
+            margin: 0;
+            padding: 0;
+        }
+
+    #divEdit {
+        width: 100%;
+        height: 100%;
+        margin: 10px 30px;
+        border-radius: 3px;
+    }
+
+    #eform {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        z-index: 1;
+    }
+
+    #divFlowBox {
+        width: 100%;
+        height: 100%;
+        /*z-index: -100;*/
+    }
+
+    .xu-text {
+        width: 180px;
+        margin: 5px;
+    }
+
+    .xu-fun {
+        border: solid 1px #c3c3c3;
+    }
+
+    .xu-col2 {
+        width: 49%;
+    }
+
+    .xu-col3 {
+        width: 32%;
+    }
+</style>
+
+<script src="~/js/lib/jsplumb.js"></script>
+<script src="~/js/view/MyFlow.js"></script>
+<script type="text/javascript">
+    $(function () {
+        _me.init();
+        _me.test1();
+    });
+</script>
+
+<div class="row">
+    <div class="col-md-6">
+        @await Component.InvokeAsync("XgProgPath", new { names = new string[] { "流程維護" } })
+    </div>
+    <div class="col-md-6">
+        @await Component.InvokeAsync("XgSaveBack", new { align = "right" })
+    </div>
+</div>
+<div class="xp-prog">
+    <!-- read form -->
+    <div id="divRead" class="xg-swap xg-active">
+        <form id='rform' class='xg-form' style="margin-bottom:0;">
+            <div class="row">
+                @await Component.InvokeAsync("XiText", new { title = "流程名稱", fid = "Name", maxLen = 30, inRow = true })
+                @await Component.InvokeAsync("XgFindTbar")
+            </div>
+        </form>
+
+        <div class='xg-btns-box'>
+            @await Component.InvokeAsync("XgCreate")
+        </div>
+        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>流程代碼</th>
+                    <th>流程名稱</th>
+                    <th>資料狀態</th>
+                    <th>維護</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- edit form -->
+    <div id="divEdit" class="xg-swap">
+        <form id='eform' class='xg-form'>
+            @await Component.InvokeAsync("XiHide", new { fid = "Id" })
+            @await Component.InvokeAsync("XiText", new { fid = "Code", maxLen = 20, required = true, extClass = "xu-text", inputTip = "流程代碼" })
+            @await Component.InvokeAsync("XiText", new { fid = "Name", maxLen = 30, required = true, extClass = "xu-text", inputTip = "流程名稱" })
+
+            <div class="btn-group-vertical" role="group" style="margin-left: 5px;" aria-label="button group vertical">
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddStartNode()" title="New Start Node">Start</button>
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddNormalNode()" title="New Node">Node</button>
+                @*<button type="button" class="btn btn-default xu-fun" onclick="_me.onAutoNode()" title="New Auto Node">Auto</button>*@
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddEndNode()" title="New End Node">End</button>
+            </div>
+        </form>
+
+        <div id="divEdit2" class="jtk-surface jtk-surface-nopan">
+            <!-- flow node template, _isnew(lower case !!), _key are need !! -->
+            <div data-shape="Circle" id="Start1" class="xf-node xf-start-node" style="left:379px; top:100px;">
+                Start1
+                @await Component.InvokeAsync("XiHide", new { fid = "Id", value = "5YW3R5TEZA" })
+                @await Component.InvokeAsync("XiHide", new { fid = "NodeType", value = "S" })
+                <div class="xf-ep" action="begin"></div>
+            </div>
+            <div data-shape="Circle" id="Node1" class="xf-node" style="left:311px; top:198px;">
+                Node1
+                @await Component.InvokeAsync("XiHide", new { fid = "Id", value = "5YW3R5TG0A" })
+                @await Component.InvokeAsync("XiHide", new { fid = "NodeType", value = "N" })
+                <div class="xf-ep" action="begin"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- context menu for node & line -->
+<ul class='xf-menu'>
+    <li onclick="_me.flow.onMenuEdit()">Edit</li>
+    <li onclick="_me.flow.onMenuDelete()">Delete</li>
+</ul>
+
+<!-- flow node template, _isnew(lower case !!), _key are need !! -->
+<script id="tplNode" type="text/template">
+
+</script>
+
+<!-- flow lines container, hide -->
+<div id="divLinesBox" style="display:none"></div>
+
+<!-- flow line template -->
+<script id="tplLine" type="text/template">
+
+</script>
+
+<!-- node property modal -->
+<div id="modalNodeProp" class="modal fade xg-modal" role="dialog">
+
+</div>
+
+<!-- line property modal -->
+<div id="modalLineProp" class="modal fade xg-modal" role="dialog">
+
+</div>
+
+<script id="tplLineCond" type="text/template">
+    <tr>
+    </tr>
+</script>

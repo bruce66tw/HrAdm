@@ -52,17 +52,40 @@ order by Id
         {
             return TableToCodes("Role", db);
         }
-        #endregion
-
-
-        #region from _Code
-        public static List<IdStrDto> GetLangLevels(Db db = null)
+        public static List<IdStrDto> GetProgs(Db db = null)
         {
-            return GetCodes("LangLevel", db);
+            return TableToCodes("Prog", db);
         }
         #endregion
 
-        //get code table rows for 下拉式欄位
+
+        #region get from _Code
+        public static List<IdStrDto> GetLangLevels(Db db = null)
+        {
+            return TypeToCodes("LangLevel", db);
+        }
+        #endregion
+
+        #region for flow
+        public static List<IdStrDto> GetNodeTypes(Db db = null)
+        {
+            return TypeToCodes("NodeType", db);
+        }
+        public static List<IdStrDto> GetSignerTypes(Db db = null)
+        {
+            return TypeToCodes("SignerType", db);
+        }
+        public static List<IdStrDto> GetAndOrs(Db db = null)
+        {
+            return TypeToCodes("AndOr", db);
+        }
+        public static List<IdStrDto> GetLineOps(Db db = null)
+        {
+            return TypeToCodes("LineOp", db);
+        }
+        #endregion
+
+        //get codes from sql 
         public static List<IdStrDto> SqlToCodes(string sql, Db db = null)
         {
             var emptyDb = (db == null);
@@ -76,17 +99,8 @@ order by Id
         }
 
         //get code table rows for 下拉式欄位
-        public static List<IdStrDto> GetCodes(string type, Db db = null)
+        public static List<IdStrDto> TypeToCodes(string type, Db db = null)
         {
-            /*
-            var sql = string.Format(@"
-select 
-    Code as Id, {0} as Str
-from dbo._Code
-where Type='{1}'
-order by Sort
-", _Locale.GetLocaleNoDash(), type);
-            */
             var sql = $@"
 select 
     Code as Id, Name as Str

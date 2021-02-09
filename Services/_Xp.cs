@@ -26,7 +26,7 @@ namespace HrAdm.Services
         {
             return GetUploadDir() + "UserLicence";
         }
-        
+
         /*
         //constructor
         static _Xp()

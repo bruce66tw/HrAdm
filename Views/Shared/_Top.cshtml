@@ -17,6 +17,13 @@
         background: #28C2FE;
         height: 45px;
     }
+
+    #_Top li {
+        margin: auto 5px;
+    }
+    #_Top i {
+        font-size: 20px;
+    }
 </style>
 
 <nav id="_Top" class="navbar navbar-expand navbar-dark">
@@ -27,27 +34,28 @@
 
     <a class="navbar-brand" href="#"><i class="fa fa-code-branch"></i>@_Fun.Config.SystemName</a>
 
-    @*
-        <div class="navbar-collapse collapse">
-            <ul class="navbar-nav ml-auto">
-                <li>
-                    @Html.XiSelect("_Locale", _Session.Locale, locales, prop: new PropSelectDto() { AddEmptyRow = false, FnOnChange = "_xp.onChangeLocale(this.value)" })
-                </li>
-                <li style="margin:auto; padding-right:10px; font-size: 20px;">
-                    <a class="nav-link" href="@Url.Action("Board", "Home")">
-                        <i class="fa fa-home"></i>
-                    </a>
-                </li>
-                <li style="margin:auto; padding-right:10px;">
-                   @_Session.UserName
-                </li>
-                <li>
-                    <a class="nav-link" href="@Url.Action("Login", "Home")">
-                        <i class="fa fa-sign-out"></i>Logout
-                    </a>
-                </li>
-            </ul>
-        </div>
-    *@
+    <div class="navbar-collapse collapse">
+        <ul class="navbar-nav ml-auto">
+            @*
+            <li>
+                @Html.XiSelect("_Locale", _Session.Locale, locales, prop: new PropSelectDto() { AddEmptyRow = false, FnOnChange = "_xp.onChangeLocale(this.value)" })
+            </li>
+            *@
+
+            <li>
+                <a class="nav-link" href="@Url.Action("Index", "Home")">
+                    <i class="ico-home"></i>
+                </a>
+            </li>
+            <li>
+                @_Fun.GetBaseUser().UserName
+            </li>
+            <li>
+                <a class="nav-link" title="Logout" href="@Url.Action("Logout", "Home")">
+                    <i class="ico-exit"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
 </nav>
 

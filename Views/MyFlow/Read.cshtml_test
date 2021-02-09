@@ -1,0 +1,137 @@
+﻿@{
+    var cols = "4,6";
+}
+
+<!--
+<link href="~/css/lib/jsPlumb/jsplumbtoolkit-defaults.css" rel="stylesheet">
+-->
+<link href="~/css/lib/jsPlumb/jsplumbtoolkit-demo.css" rel="stylesheet">
+<link href="~/css/view/MyFlow.css" rel="stylesheet">
+<style>
+    .xp-prog {
+        height: 100%;
+        width: 95%;
+        /*padding: 2px;*/
+    }
+
+        .xp-prog.xu-hide {
+            border: none !important;
+            margin: 0;
+            padding: 0;
+        }
+
+    #divEdit {
+        width: 100%;
+        height: 100%;
+        margin: 10px 30px;
+        border-radius: 3px;
+    }
+
+    #eform {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        z-index: 1;
+    }
+
+    #divFlowBox {
+        width: 100%;
+        height: 100%;
+        /*z-index: -100;*/
+    }
+
+    .xu-text {
+        width: 180px;
+        margin: 5px;
+    }
+
+    .xu-fun {
+        border: solid 1px #c3c3c3;
+    }
+
+    .xu-col2 {
+        width: 49%;
+    }
+
+    .xu-col3 {
+        width: 32%;
+    }
+</style>
+
+<script src="~/js/lib/jsplumb.js"></script>
+<script src="~/js/view/MyFlow.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var _me = {
+            init: function () {
+                //initial edit one/many
+                _me.mNode = new EditMany('Id', null, 'tplNode', '', '.xf-node');
+                _me.mLine = new EditMany('Id', null, 'tplLine', 'Sort', '.xu-row');
+                //_crud.init(config, [null, _me.mNode, _me.mLine]);
+
+                //initial flow(jsplumb)
+                _me.flow = new Flow('divEdit', _me.mNode, _me.mLine);
+            },
+        };
+
+        _me.init();
+
+        //
+        var line = {
+            Id: '5YW3R5TH2A',
+            StartNode: '5YW3R5TEZA',
+            EndNode: '5YW3R5TG0A',
+        };
+        var flow = _me.flow;
+        flow.setNodeEvent($('#Start1'));
+        flow.setNodeEvent($('#Node1'));
+        flow.renderLine(line);
+        /*
+        flow.plumb.connect({ source:'Start1', target:'Node1'});
+        */
+    });
+</script>
+
+<div class="row">
+    <div class="col-md-6">
+        @await Component.InvokeAsync("XgProgPath", new { names = new string[] { "流程維護" } })
+    </div>
+    <div class="col-md-6">
+        @await Component.InvokeAsync("XgSaveBack", new { align = "right" })
+    </div>
+</div>
+<div class="xp-prog">
+    <div id="divRead" class="xg-swap">
+    </div>
+
+    <!-- edit form -->
+    <div id="divEdit" class="xg-swap xg-active jtk-surface jtk-surface-nopan">
+        <form id='eform' class='xg-form'>
+            @await Component.InvokeAsync("XiHide", new { fid = "Id" })
+            @await Component.InvokeAsync("XiText", new { fid = "Code", maxLen = 20, required = true, extClass = "xu-text", inputTip = "流程代碼" })
+            @await Component.InvokeAsync("XiText", new { fid = "Name", maxLen = 30, required = true, extClass = "xu-text", inputTip = "流程名稱" })
+
+            <div class="btn-group-vertical" role="group" style="margin-left: 5px;" aria-label="button group vertical">
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddStartNode()" title="New Start Node">Start</button>
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddNormalNode()" title="New Node">Node</button>
+                @*<button type="button" class="btn btn-default xu-fun" onclick="_me.onAutoNode()" title="New Auto Node">Auto</button>*@
+                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddEndNode()" title="New End Node">End</button>
+            </div>
+        </form>
+
+        <!-- flow node template, _isnew(lower case !!), _key are need !! -->
+        <div data-shape="Circle" id="Start1" class="xf-node xf-start-node" style="left:379px; top:100px;">
+            Start1
+            @await Component.InvokeAsync("XiHide", new { fid = "Id", value = "5YW3R5TEZA" })
+            @await Component.InvokeAsync("XiHide", new { fid = "NodeType", value = "S" })
+            <div class="xf-ep" action="begin"></div>
+        </div>
+        <div data-shape="Circle" id="Node1" class="xf-node" style="left:311px; top:198px;">
+            Node1
+            @await Component.InvokeAsync("XiHide", new { fid = "Id", value = "5YW3R5TG0A" })
+            @await Component.InvokeAsync("XiHide", new { fid = "NodeType", value = "N" })
+            <div class="xf-ep" action="begin"></div>
+        </div>
+    </div>
+</div>
+

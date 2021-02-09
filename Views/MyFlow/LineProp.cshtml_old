@@ -1,0 +1,55 @@
+﻿@using BaseWeb.Helpers;
+@using Base.Models;
+@{ 
+    var cols = new int[] { 12, 4, 8 };
+}
+
+<style>
+    .xu-col2 {
+        width: 49%;
+    }
+    .xu-col3 {
+        width: 32%;
+    }
+</style>
+
+<div id="divLineProp" class="modal fade xg-modal" role="dialog">
+    <div class="modal-dialog" style="max-width:620px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Line Property</div>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="eformLine" class="form-horizontal xg-form" style="padding:5px 20px;">
+                    @Html.XiLabel("FromNode", "", "From Node :", cols)
+                    @Html.XiLabel("ToNode", "", "To Node :", cols)
+                    @Html.XiNum("Sort", "", "Run Order :", true, cols, new PropNumModel() { IsDigit = true, MaxValue = 10, Width = "80px" })
+                    @*Html.XiRadios("LineType", "0", "執行種類 :", (List<IdStrDto>)ViewBag.LineTypes, 9)*@
+                    <div id="divLineCondBox" class="row xg-row">
+                        <div class="col-md-12 col-sm-12 xg-label" style="margin-bottom: 5px;">
+                            執行條件
+                            <button type="button" class="btn btn-primary" onclick="_me.onAddLineCond()">新增一列</button>
+                        </div>
+                        <table class="table table-bordered xg-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th width="104px" class="text-center"></th>
+                                    <th>欄位名稱</th>
+                                    <th width="103px">運算</th>
+                                    <th width="60px">欄位值</th>
+                                    <th width="85px"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="divLineConds"></tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="_me.onLinePropOk()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>

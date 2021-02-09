@@ -10,9 +10,11 @@ namespace HrAdm.Services
         private ReadDto dto = new ReadDto()
         {
             ReadSql = @"
-select u.*, d.name as DeptName from [User] u
-join [Dept] d on u.DeptId=d.Id
-order by u.Id
+select u.Id, u.Account, u.Name, u.Status,
+   d.Name as DeptName
+from [User] u
+join Dept d on u.DeptId=d.Id
+order by u.Name
 ",
             Items = new [] {
                 new QitemDto { Fid = "Account", Op = ItemOpEstr.Like },

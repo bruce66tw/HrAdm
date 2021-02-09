@@ -6,9 +6,21 @@
 
   <ItemGroup>
     <Compile Remove="wwwroot\js\base_old\**" />
+    <Compile Remove="_log\**" />
+    <Compile Remove="_source_old\**" />
+    <Compile Remove="_upload\**" />
     <Content Remove="wwwroot\js\base_old\**" />
+    <Content Remove="_log\**" />
+    <Content Remove="_source_old\**" />
+    <Content Remove="_upload\**" />
     <EmbeddedResource Remove="wwwroot\js\base_old\**" />
+    <EmbeddedResource Remove="_log\**" />
+    <EmbeddedResource Remove="_source_old\**" />
+    <EmbeddedResource Remove="_upload\**" />
     <None Remove="wwwroot\js\base_old\**" />
+    <None Remove="_log\**" />
+    <None Remove="_source_old\**" />
+    <None Remove="_upload\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,8 +30,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\MyFlow\LineProp.cshtml" />
+    <Content Remove="Views\MyFlow\NodeProp.cshtml" />
+    <Content Remove="Views\MyFlow\Read_old.cshtml" />
+    <Content Remove="Views\MyFlow\zz_Edit.cshtml" />
+    <Content Remove="Views\MyFlow\zz_Test.cshtml" />
+    <Content Remove="Views\MyFlow\zz__LineCond.cshtml" />
     <Content Remove="Views\User\Edit - 複製.cshtml" />
     <Content Remove="Views\User\Read - 複製.cshtml" />
+    <Content Remove="wwwroot\js\base\Flow.js" />
     <Content Remove="wwwroot\js\base\_check.j_old" />
     <Content Remove="wwwroot\js\base\_datatable.j_old" />
     <Content Remove="wwwroot\js\base\_editMany.js_old" />
@@ -33,10 +52,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <None Remove="Views\MyFlow\Edit.cshtml_old" />
+    <None Remove="Views\MyFlow\Read.cshtml_test" />
+    <None Remove="Views\MyFlow\Read.cshtml_test2" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Views\MyFlow\Read.cshtml_test" />
+    <Content Include="Views\MyFlow\Read.cshtml_test2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Base\BaseFlow\BaseFlow.csproj" />
     <ProjectReference Include="..\Base\BaseWeb\BaseWeb.csproj" />
     <ProjectReference Include="..\Base\Base\Base.csproj" />
   </ItemGroup>
@@ -75,6 +107,7 @@
     <None Include="wwwroot\css\view\_xp.css" />
     <None Include="wwwroot\js\base\Datatable.js" />
     <None Include="wwwroot\js\base\EditMany.js" />
+    <None Include="wwwroot\js\base\Flow.js" />
     <None Include="wwwroot\js\base\EditOne.js" />
     <None Include="wwwroot\js\base\update_20181209.txt" />
     <None Include="wwwroot\js\base\_ajax.js" />
