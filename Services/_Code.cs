@@ -8,7 +8,7 @@ namespace HrAdm.Services
     //與下拉欄位有關
     public static class _Code
     {
-        //mapping to _Code.Type
+        //mapping to Code.Type
         public const string Status = "Status";
         //WfNode
         public const string NodeType = "NodeType";
@@ -59,10 +59,18 @@ order by Id
         #endregion
 
 
-        #region get from _Code
+        #region get from Code table
         public static List<IdStrDto> GetLangLevels(Db db = null)
         {
             return TypeToCodes("LangLevel", db);
+        }
+        public static List<IdStrDto> GetLeaveTypes(Db db = null)
+        {
+            return TypeToCodes("LeaveType", db);
+        }
+        public static List<IdStrDto> GetSignStatuses(Db db = null)
+        {
+            return TypeToCodes("SignStatus", db);
         }
         #endregion
 
@@ -104,7 +112,7 @@ order by Id
             var sql = $@"
 select 
     Code as Id, Name as Str
-from dbo._Code
+from dbo.Code
 where Type='{type}'
 order by Sort";
             return SqlToCodes(sql, db);           
@@ -120,7 +128,7 @@ order by Sort";
             var sql = string.Format(@"
 select 
     Code as Id, Name as Str, Ext
-from dbo._Code
+from dbo.Code
 where Type='{0}'
 and Ext='0'
 order by Sort

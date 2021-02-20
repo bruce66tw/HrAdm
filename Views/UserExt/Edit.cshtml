@@ -151,7 +151,7 @@
 		<td>@await Component.InvokeAsync("XiSelect", new { fid = "SpeakLevel", rows = (List<IdStrDto>)ViewBag.LangLevels })</td>
 		<td>@await Component.InvokeAsync("XiSelect", new { fid = "ReadLevel", rows = (List<IdStrDto>)ViewBag.LangLevels })</td>
 		<td>@await Component.InvokeAsync("XiSelect", new { fid = "WriteLevel", rows = (List<IdStrDto>)ViewBag.LangLevels })</td>
-		<td width='100px' class='text-center'>@await Component.InvokeAsync("XgDeleteUpDown", "_me.mUserLang")</td>
+		<td width='100px' class='text-center'>@await Component.InvokeAsync("XgDeleteUpDown", new { mName = "_me.mUserLang" })</td>
     </tr>
 </script>
 
@@ -173,7 +173,7 @@
 		@await Component.InvokeAsync("XiHide", new { fid = "Sort" })
 		<td>@await Component.InvokeAsync("XiText", new { fid = "SkillName", maxLen = 30, required = true })</td>
 		<td>@await Component.InvokeAsync("XiTextArea", new { fid = "SkillDesc", maxLen = 500 })</td>
-		<td width='100px' class='text-center'>@await Component.InvokeAsync("XgDeleteUpDown", "_me.mUserSkill")</td>
+		<td width='100px' class='text-center'>@await Component.InvokeAsync("XgDeleteUpDown", new { mName = "_me.mUserSkill" })</td>
     </tr>
 </script>
 

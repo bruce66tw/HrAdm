@@ -19,7 +19,7 @@ function Flow(boxId, mNode, mLine) {
         this.AutoNode = 'A';
 
         //and/or seperator for line condition
-        //js only replace first found, so use regular, value is same to _code.type=AndOr
+        //js only replace first found, so use regular, value is same to code.type=AndOr
         this.OrSep = '{O}';  
         this.AndSep = '{A}';
         this.ColSep = ',';
@@ -40,7 +40,8 @@ function Flow(boxId, mNode, mLine) {
         //start node config
         this.StartNodeCfg = {
             filter: this.EpFilter,
-            anchor: 'Continuous',
+            //anchor: 'Continuous',
+            anchor: ['Bottom', 'Left', 'Right'],
             //outlineWidth not work !!
             connectorStyle: {
                 stroke: '#5c96bc',
@@ -63,7 +64,8 @@ function Flow(boxId, mNode, mLine) {
         //end node config
         this.EndNodeCfg = {
             dropOptions: { hoverClass: 'dragHover' },
-            anchor: 'Continuous',
+            //anchor: 'Continuous',
+            anchor: ['Top', 'Bottom', 'Left', 'Right'],
             allowLoopback: true,
         };
         //#endregion
@@ -73,6 +75,7 @@ function Flow(boxId, mNode, mLine) {
         this.mNode = mNode;
         this.mLine = mLine;
 
+        //this.popupMenu = $('.xf-menu');
         this.divFlowBox = $('#' + boxId);
         this.divLinesBox = $('#divLinesBox');       //hidden
         this.divLineConds = $('#divLineConds');     //div line conds inside modalLineProp
@@ -180,44 +183,44 @@ function Flow(boxId, mNode, mLine) {
         */
 
         //line(connection) show context menu
-        plumb.bind('contextmenu', function (c, event) {
+        plumb.bind('contextmenu', function (elm, event) {
             //"this" not work here !!
-            me.showPopupMenu(c, event, false);
+            me.showPopupMenu(elm, event, false);
         });
 
         //event: before build connection
-        //conn: connection        
-        //plumb.bind('connection', function (conn) {
-        plumb.bind('beforeDrop', function (conn) {
+        //info: connection        
+        //plumb.bind('connection', function (info) {
+        plumb.bind('beforeDrop', function (info) {
             //if (this.loading)
             //    return true;
 
             //if connection existed, return false for stop 
-            //conn.source did not work here !!
-            var conn2 = conn.connection;
-            if (plumb.getConnections({ source: conn2.source, target: conn2.target }).length > 0)
+            //info.source did not work here !!
+            var conn = info.connection;
+            if (plumb.getConnections({ source: conn.source, target: conn.target }).length > 0)
                 return false;
 
             //get source node & type
-            //var sourceType = me.elmToNodeRow(conn2.source).NodeType;
+            //var sourceType = me.elmToNodeRow(conn.source).NodeType;
             //var lineType = this.isSourceCondMode(sourceType) ? this.LineTypeCond : this.LineTypeYes;
             var prop = me.getLineProp('');
 
             //set conn style & label
-            conn2.setPaintStyle(prop.style);    //real connection
-            me.setLineLabel(conn2, prop.label);
+            conn.setPaintStyle(prop.style);    //real connection
+            me.setLineLabel(conn, prop.label);
 
             //add parameters(line model) into connection
             //debugger;
             var row = {
-                StartNode: me.elmToNodeValue(conn2.source, 'Id'),
-                EndNode: me.elmToNodeValue(conn2.target, 'Id'),
+                StartNode: me.elmToNodeValue(conn.source, 'Id'),
+                EndNode: me.elmToNodeValue(conn.target, 'Id'),
                 //LineType: lineType,
                 CondStr: '',
                 Sort: 9,
             };
-            me.setLineKey(conn2, me.addLine(row));
-            //this.connSetParas(conn2, line, true);
+            me.setLineKey(conn, me.addLine(row));
+            //this.connSetParas(conn, line, true);
 
             //alert('connect');
             return true;
@@ -240,10 +243,14 @@ function Flow(boxId, mNode, mLine) {
 
         //hide context menu (jsPlumb no mousedown event !!)
         $(document).bind('mousedown', function (e) {
+            //if (_obj.isShow(me.popupMenu))
+            //    me.popupMenu.hide(100);
+            
             //"this" is not work here !!
             var filter = me.MenuFilter;
             if (!$(e.target).parents(filter).length > 0)
                 $(filter).hide(100);
+            
         });
     };
 
@@ -262,7 +269,7 @@ function Flow(boxId, mNode, mLine) {
         //must put before makeSource/makeTarget !!
         var nodeElm = nodeObj[0];
         plumb.draggable(nodeElm, {
-            //grid: [20, 20],
+            grid: [10, 10],
             //update node position
             stop: function (params) {
                 //debugger;
@@ -350,7 +357,7 @@ function Flow(boxId, mNode, mLine) {
      */
     this.loadLines = function (json) {
         //stop drawing
-        //jsPlumb.setSuspendDrawing(true);
+        jsPlumb.setSuspendDrawing(true);
 
         //empty jsplumb lines
         var conns = this.plumb.getAllConnections();   //for in did not work !!
@@ -366,7 +373,7 @@ function Flow(boxId, mNode, mLine) {
         this.mLine.loadRows(this.divLinesBox, rows);
 
         //start drawing
-        //jsPlumb.setSuspendDrawing(false, true);
+        jsPlumb.setSuspendDrawing(false, true);
     };
 
     //#region node function
@@ -475,7 +482,7 @@ function Flow(boxId, mNode, mLine) {
 
         //add deleted row of node
         var node = $(nodeElm);
-        this.mNode.deleteRow(node.data(_fun.Fid));
+        this.mNode.deleteRow(this.getObjKey(node));
 
         //delete node 
         $(nodeElm).remove();
@@ -559,12 +566,12 @@ function Flow(boxId, mNode, mLine) {
     this.isLineCondMode = function (lineType) {
         return (lineType === '2');
     };
-    */
 
     //is node type editable or not
     this.isNodeTypeEditable = function (nodeType) {
         return (nodeType === this.NormalNode || nodeType === this.AutoNode);
     };
+    */
 
     /**
      * get line property: style, label
@@ -578,8 +585,17 @@ function Flow(boxId, mNode, mLine) {
         }
     };
 
-    this.getLineKey = function (conn) {
+    this.getLineElmKey = function (conn) {
         return conn.getParameters()['Id'];
+    };
+
+    /**
+     * get object(node/line) key
+     * param obj {object}
+     * return {string} key value
+     */
+    this.getObjKey = function (obj) {
+        return _itext.get('Id', obj);
     };
 
     //set connection label
@@ -600,7 +616,7 @@ function Flow(boxId, mNode, mLine) {
     this.deleteLine = function (conn) {
         //add deleted row
         var json = conn.getParameters();    //model
-        this.mLine.deleteRow(json[_fun.Fid]);
+        this.mLine.deleteRow(json.Id);
 
         //delete conn
         this.plumb.deleteConnection(conn);
@@ -612,18 +628,42 @@ function Flow(boxId, mNode, mLine) {
     };
     //#endregion (line function)
 
-
-    //elm: node element or connection 
+    /**
+     * show popup menu for node(normal, auto)/line
+     * param elm {element} node element or connection
+     * param event {event}
+     * param isNode {bool} true(node), false(line)
+     */
     this.showPopupMenu = function (elm, event, isNode) {
         //stop default context menu 
         event.preventDefault();
 
         //set instance variables
         this.nowIsNode = isNode;
-        this.nowElm = elm;
+        this.nowElm = isNode ? $(elm).closest(this.NodeFilter)[0] : elm;
+
+        //set edit status
+        var canEdit = true;
+        var nodeType;
+        if (isNode) {
+            nodeType = this.elmToNodeValue(elm, 'NodeType');
+            canEdit = (nodeType == this.NormalNode || nodeType == this.AutoNode);
+        } else {
+            nodeType = this.elmToNodeValue(elm.source, 'NodeType');
+            canEdit = (nodeType == this.StartNode || nodeType == this.AutoNode);
+        }
+        /*
+        //debugger;
+        var item = this.popupMenu.find('.xd-edit');
+        if (canEdit)
+            item.show();
+        else
+            item.hide();
+        */
 
         // Show contextmenu
         $(this.MenuFilter).finish()
+        //this.popupMenu.finish()
             .toggle(100)
             .css({
                 top: event.pageY + 'px',
@@ -736,7 +776,7 @@ function Flow(boxId, mNode, mLine) {
 
     //jsplumb connection to line object
     this.connToLine = function (conn) {
-        return this.idToLine(this.getLineKey(conn));
+        return this.idToLine(this.getLineElmKey(conn));
     };
 
     //id to line object
@@ -778,26 +818,24 @@ function Flow(boxId, mNode, mLine) {
     };
     //on add end node
     this.onAddEndNode = function () {
-        this.addNode('', this.EndNode);
+        this.addNode('E', this.EndNode);
     };
-    /*
-    this.onAutoNode = function () {
-        this.addNode(this.AutoNode);
+    this.onAddAutoNode = function () {
+        this.addNode('Auto', this.AutoNode);
     };
-    */
     //on add normal node
     this.onAddNormalNode = function () {
         this.addNode('Node', this.NormalNode);
     };
 
     /*
-    this.onDeleteNode = function () {
+    this.deleteNode = function (elm) {
         //delete lines first
 
         //delete node
     };
 
-    this.onDeleteLine = function () {
+    this.deleteLine = function (elm) {
         var tr = $(btn).closest('tr');
     };
     */
@@ -811,13 +849,14 @@ function Flow(boxId, mNode, mLine) {
     };
 
     this.onMenuDelete = function () {
-        if (this.nowIsNode) {
+        var me = this;
+        if (me.nowIsNode) {
             _tool.ans('delete this node ?', function () {
-                this.deleteNode(this.nowElm);
+                me.deleteNode(me.nowElm);
             });
         } else {
             _tool.ans('delete this line ?', function () {
-                this.deleteLine(this.nowElm);
+                me.deleteLine(me.nowElm);
             });
         }
     };
@@ -845,23 +884,29 @@ function Flow(boxId, mNode, mLine) {
         _modal.hideO(this.modalNodeProp);
 
         //set new value
-        var nodeObj = $(this.nowElm);
-        var row = _form.toJson(nodeObj);
+        var row = _form.toJson(this.eformNode);
         //this.mNode.setRow(nodeObj.data(_fun.Fid), row);
 
-        //update node name
-        nodeObj.text(row.Name);
+        //update node display name
+        var nodeObj = $(this.nowElm);
+        nodeObj.find('.xd-name').text(row.Name);
+
+        //update node form fields
+        _itext.set('Name', row.Name, nodeObj);
+        _itext.set('SignerType', row.SignerType, nodeObj);
+        _itext.set('SignerValue', row.SignerValue, nodeObj);
 
         //change node style, has xf-ep div at the end !!
         //var html = row.Name + '<div class="xf-ep" action="begin"></div>';
         //nodeObj.html(html);
 
+        /*
         //reset auto node class
         if (row.NodeType == this.AutoNode)
             nodeObj.addClass(this.AutoNodeCls);
         else
             nodeObj.removeClass(this.AutoNodeCls);
-
+        */
     };
 
     //line prop click ok

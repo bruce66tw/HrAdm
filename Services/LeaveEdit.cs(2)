@@ -1,0 +1,62 @@
+﻿using Base.Enums;
+using Base.Models;
+using Base.Services;
+using Newtonsoft.Json.Linq;
+
+namespace HrAdm.Services
+{
+    public class LeaveEdit
+    {
+        private EditDto GetDto()
+        {
+            return new EditDto
+            {
+				Table = "dbo.[Leave]",
+                PkeyFid = "Id",
+                Items = new [] 
+				{
+					new EitemDto { Fid = "Id" },
+					new EitemDto { Fid = "UserId" },
+					new EitemDto { Fid = "AgentId" },
+					new EitemDto { Fid = "LeaveType" },
+					new EitemDto { Fid = "StartTime" },
+					new EitemDto { Fid = "EndTime" },
+					new EitemDto { Fid = "Hours" },
+					new EitemDto { Fid = "Mins" },
+					new EitemDto { Fid = "FlowSignStatus" },
+					new EitemDto { Fid = "Status" },
+					new EitemDto { Fid = "Creator" },
+					new EitemDto { Fid = "Created" },
+					new EitemDto { Fid = "Reviser" },
+					new EitemDto { Fid = "Revised" },
+                },
+            };
+        }
+
+        private CrudEdit Service()
+        {
+            return new CrudEdit(GetDto());
+        }
+
+        public JObject GetJson(string key)
+        {
+            return Service().GetJson(key);
+        }
+
+        public ResultDto Create(JObject json)
+        {
+            return Service().Create(json);
+        }
+
+        public ResultDto Update(string key, JObject json)
+        {
+            return Service().Update(key, json);
+        }
+
+        public ResultDto Delete(string key)
+        {
+            return Service().Delete(key);
+        }
+
+    } //class
+}

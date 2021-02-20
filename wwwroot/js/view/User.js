@@ -23,7 +23,7 @@
         };
 
         //initial
-        _me.mUserRole = new EditMany('Id', 'eformUserRole', 'tplUserRole');
+        _me.mUserRole = new EditMany('Id', 'eformUserRole', 'tplUserRole', 'tr');
 		_crud.init(config, [null, _me.mUserRole]);
     },
 

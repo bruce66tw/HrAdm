@@ -5,14 +5,20 @@ var _fun = {
     //=== constant start(大camel) ===
     Fid: 'fid',            //data-fid
 
+    //for moment.js
+    JsDateFormat: 'YYYY/MM/DD',
+    JsDtFormat: 'YYYY/MM/DD HH:mm:ss',
+
     //input field error validation, need match server side _Web.cs
     //jsPath: '../Scripts/',      //js path for load
     //errTail: '_err',            //error label 欄位id後面會加上這個字元
     XiBorder: 'xi-border',           //input border class
+    XdRequired: 'xd-required',
+
+    //??
     errCls: 'xg-error',           //欄位驗証錯誤時會加上這個 class name
     errLabCls: 'xg-error-label',     //error label 的 class name
     //errBoxCls: 'xg-errorbox', //??_box欄位驗証錯誤時會加上這個 class name
-    XdRequired: 'xd-required',
 
     //constant for mapping to backend
     FunC: 'C',     //create
@@ -23,10 +29,9 @@ var _fun = {
     //=== constant end ===
 
 
-    //變數
+    //variables
     locale: 'zh-TW',
-    maxFileSize: 50971520,  //上傳檔案限制50M
-    //localeCode: 'zh-TW',
+    maxFileSize: 50971520,  //upload file limit(50M)
 
     //mid variables
     data: {},

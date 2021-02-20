@@ -975,12 +975,18 @@ body.xg-show-wait .xg-wait {
 
 
 /* 切換畫面, ex: Read, Edit */
+/*
 .xg-swap {
     display: none;
 }
 
 .xg-swap.xg-active {
     display: block;
+}
+*/
+
+.xg-hide {
+    display: none;
 }
 
 .xg-inline {

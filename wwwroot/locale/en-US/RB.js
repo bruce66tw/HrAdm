@@ -1,8 +1,8 @@
 ﻿//base resource
 var RB = {
 
-    DateEditFormat: 'YYYY/MM/DD',
-    DateShowFormat: 'YYYY年MM月DD日',
+    DateFormat: 'YYYY/MM/DD',
+    //DateShowFormat: 'YYYY年MM月DD日',
     DtFormat: 'YYYY/MM/DD HH:mm:ss',
     DtFormat2: 'YYYY/MM/DD HH:mm',
 

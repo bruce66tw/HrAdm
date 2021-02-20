@@ -326,7 +326,7 @@ var _chart = {
 /**
  * note:
  *   1.reserved function:
- *     a.fnAfterSwap(readMode): called after _form.swap()
+ *     a.fnAfterSwap(readMode): called after _crud.swap()
  */
 var _crud = {
 
@@ -472,7 +472,7 @@ var _crud = {
         if (edit.eform == null)
             return;
 
-        _idate.init('', edit.eform);  //init 日期欄位(所有欄位)
+        _idate.init('', edit.eform);  //init all date inputs
         _valid.init(edit.eform);
         var childLen = _crud.getEditChildLen(edit);
         for (var i = 0; i < childLen; i++)
@@ -495,6 +495,27 @@ var _crud = {
         if (find2 !== null && _obj.isShow(find2))
             _json.copy(_form.toJson(find2), row);
         return row;
+    },
+
+    /**
+     * change newDiv to active
+     * param newDiv {object} jquery object
+     */ 
+    swap: function (toRead) {
+        var oldDiv, newDiv;
+        if (toRead) {
+            oldDiv = _me.divEdit;
+            newDiv = _me.divRead;
+        } else {
+            oldDiv = _me.divRead;
+            newDiv = _me.divEdit;
+        }
+
+        if (_obj.isShow(oldDiv)) {
+            oldDiv.fadeToggle(200);
+            newDiv.fadeToggle(500);
+        }
+        _crud._afterSwap(toRead);
     },
 
     //=== event start ===
@@ -540,12 +561,11 @@ var _crud = {
      * onclick Create button
      */
     onCreate: function () {
-        //_me.key = '';
         var fun = _fun.FunC;
         _prog.setPath(fun);
         _crud.setEditStatus(fun);
         _crud.resetForm(_me.edit0);
-        _form.swap(_me.divEdit, function () { _crud._afterSwap(fals) });
+        _crud.swap(false);        
     },
 
     /**
@@ -576,18 +596,8 @@ var _crud = {
             //_me.key = key;
             _prog.setPath(funType);
             _crud.setEditStatus(funType);
-
-            _form.swap(_me.divEdit, function () {
-                _crud.loadJson(data);
-                _crud._afterSwap(false);
-            });
-
-            /*
-            //trigger custom function if any
-            if ($.isFunction(_me._ueOnUpdate)){
-                _me._ueOnUpdate(data);
-            }
-            */
+            _crud.swap(false);
+            _crud.loadJson(data);
         });
     },
 
@@ -1052,8 +1062,7 @@ var _crud = {
     toReadMode: function () {
         //_me.divReadTool.show();
         _prog.resetPath();
-        _form.swap(_me.divRead);
-        _crud._afterSwap(true);
+        _crud.swap(true);
     },
 
     _afterSwap: function (toRead) {
@@ -1069,6 +1078,138 @@ var _crud = {
     },
 
 };//class
+/**
+ * for date related
+ * short name:
+ *  1.date: moment date
+ *  2.dt: moment datetime
+ *  3.ds: date string
+ *  4.dts: datetime string
+ */ 
+var _date = {
+
+    /**
+     * Constant, moment.js datetime format, match to cs _Fun.CsDtFormat, _Fun.DbDtFormat
+     */ 
+    JsDtFormat: 'YYYY-MM-DD HH:mm:ss',
+
+    /**
+      ?? 傳回起迄日期(json) for 日期欄位查詢
+      param {string} start 開始日期欄位id
+      param {string} end 結束日期欄位id
+      params {object} box box object
+      return {json} 包含start, end欄位
+     */
+    getStartEnd: function(start, end, box) {
+        //var start2 = box.find
+    },
+
+    /**
+     * get today date string in UI format
+     */ 
+    uiToday: function(){
+        //var date = new Date();
+        //return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+        return moment().format(_BR.UiDateFormat);
+    },
+
+    /**
+     * get current year
+     */ 
+    nowYear: function() {
+        return (new Date()).getFullYear();
+    },
+
+    /**
+     * js date string to ui date string
+     * param ds {string} js date string
+     * return {string} ui date string
+     */ 
+    jsToUiDate: function (ds) {
+        return (_str.isEmpty(ds))
+            ? ''
+            : moment(ds, _fun.JsDtFormat).format(_BR.UiDateFormat);
+    },
+
+    /**
+     * ui date string to js date string
+     * param ds {string} ui date string
+     * return {string} js date string
+     */
+    uiToJsDate: function (ds) {
+        return (_str.isEmpty(ds))
+            ? ''
+            : moment(ds, _BR.UiDateFormat).format(_fun.JsDtFormat);
+    },
+
+    /**
+     * js datetime string to ui datetime2 string(no second)
+     * param dts {string} js datetime string
+     * return {string} ui datetime2 string(no second)
+     */ 
+    jsToUiDt2: function (dts) {
+        return (_str.isEmpty(dts))
+            ? ''
+            : moment(dts, _fun.JsDtFormat).format(_BR.UiDtFormat2);
+    },
+
+    //?? get datetime string
+    //time為下拉欄位
+    getDt: function (fDate, fTime, box) {
+        var date = _idate.get(fDate, box);
+        var time = _iselect.get(fTime, box);
+        if (date == '')
+            return '';
+        else
+            return (time == '') ? date : date + ' ' + time;
+    },
+
+    /**
+     * compare two js date string
+     * param ds1 {string} start js date string
+     * param ds2 {string} end js date string
+     * return {bool}
+     */
+    isBig: function(ds1, ds2) {
+        //return (Date.parse(date1) > Date.parse(date2));
+        return moment(ds1, _fun.JsDtFormat).isAfter(moment(ds2, _fun.JsDtFormat));
+    },
+
+    /**
+     * get month difference by date string
+     * param ds1 {string} start date string
+     * param ds2 {string} end date string
+     * return {int} 
+     */ 
+    getMonthDiff: function (ds1, ds2) {
+        return (_str.isEmpty(start) || _str.isEmpty(end))
+            ? 0
+            : _date.getMonthDiffByDate(moment(ds1, _fun.JsDtFormat), moment(ds2, _fun.JsDtFormat));
+    },
+
+    /**
+     * get month difference by date
+     * param dt1 {string} start date
+     * param dt2 {string} end date
+     * return {int} 
+     */ 
+    getMonthDiffByDate: function (dt1, dt2) {
+        return (dt2.getFullYear() - dt1.getFullYear()) * 12
+            + dt2.getMonth() - dt1.getMonth() + 1;
+    },
+
+    /**
+     * js date string add year
+     * param date {string} 
+     * param year {int} year to add
+     * return {string} new js date string
+     */ 
+    jsDateAddYear: function (date, year) {
+        //return (parseInt(date.substring(0, 4)) + year) + date.substring(4);
+        return moment(date, _fun.JsDtFormat).add(year, 'y').format(_fun.JsDtFormat);
+    },
+
+}; //class
 
 //for EditOne.js, EditMany.js
 var _edit = {
@@ -1583,32 +1724,6 @@ var _form = {
         }
     },
 
-    /**
-     * change newDiv to active
-     * param newDiv {object} jquery object
-     */ 
-    swap: function (newDiv, fnCallback) {
-        //debugger;
-        var oldDiv = $('.xg-swap.xg-active');
-        if (newDiv === oldDiv) {
-            if (fnCallback !== undefined)
-                fnCallback();
-            return;
-        }
-
-        //effect
-        oldDiv.fadeOut(200, function () {
-            //debugger;
-            oldDiv.removeClass('xg-active');
-            newDiv.addClass('xg-active');
-            if (fnCallback !== undefined)
-                fnCallback();
-
-            newDiv.fadeIn(500);
-        });
-        //e.preventDefault();
-    },
-
     zz_reset: function (form) {
         //var box = $('#' + form);
         //文字欄位
@@ -1629,14 +1744,20 @@ var _fun = {
     //=== constant start(大camel) ===
     Fid: 'fid',            //data-fid
 
+    //for moment.js
+    JsDateFormat: 'YYYY/MM/DD',
+    JsDtFormat: 'YYYY/MM/DD HH:mm:ss',
+
     //input field error validation, need match server side _Web.cs
     //jsPath: '../Scripts/',      //js path for load
     //errTail: '_err',            //error label 欄位id後面會加上這個字元
     XiBorder: 'xi-border',           //input border class
+    XdRequired: 'xd-required',
+
+    //??
     errCls: 'xg-error',           //欄位驗証錯誤時會加上這個 class name
     errLabCls: 'xg-error-label',     //error label 的 class name
     //errBoxCls: 'xg-errorbox', //??_box欄位驗証錯誤時會加上這個 class name
-    XdRequired: 'xd-required',
 
     //constant for mapping to backend
     FunC: 'C',     //create
@@ -1647,10 +1768,9 @@ var _fun = {
     //=== constant end ===
 
 
-    //變數
+    //variables
     locale: 'zh-TW',
-    maxFileSize: 50971520,  //上傳檔案限制50M
-    //localeCode: 'zh-TW',
+    maxFileSize: 50971520,  //upload file limit(50M)
 
     //mid variables
     data: {},
@@ -2117,17 +2237,17 @@ var _icolor = {
     */
 
 }; //class
-
-//處理日期欄位(使用bootstrap-calendar) 和日期資料
+//for date input (bootstrap-datepicker)
 var _idate = $.extend({}, _ibase, {
 
     //=== get/set start ===
     getO: function (obj) {
-        return obj.val();
+        return _date.uiToJsDate(obj.val());
     },
 
     setO: function (obj, value) {
-        obj.val(_idate.toDate(value));
+        var date = _date.jsToUiDate(value);
+        obj.val(date);
     },
 
     setEditO: function (obj, status) {
@@ -2159,7 +2279,7 @@ var _idate = $.extend({}, _ibase, {
 
         //日期欄位
         obj.datepicker({
-            //format: _BR.DateEditFormat,
+            //format: _BR.UiDateFormat,
             language: _fun.locale,
             autoclose: true,
             showOnFocus: false,
@@ -2186,81 +2306,14 @@ var _idate = $.extend({}, _ibase, {
     },
 
     //show/hide datepicker
-    toggle: function (me) {
-        //$(me).parent().parent().find('input').trigger('focus');
-        $(me).parent().parent().datepicker('show');
+    toggle: function (btn) {
+        //$(btn).parent().parent().find('input').trigger('focus');
+        $(btn).parent().parent().datepicker('show');
     },
 
     //clean value
-    clean: function (me) {
-        $(me).parent().parent().datepicker('update', '');
-    },
-
-    //(停用)
-    //產生一個日期元件(用於多筆區域), 參考 XiDateHelper
-    //必須執行 _data.init()
-    //input 欄位放一個 xd-date for 判斷欄位種類為日期 !!
-    render: function (dataId, value, required, extClass) {
-        extClass = extClass || '';
-        if (required === true)
-            extClass += ' ' + _fun.XdRequired;
-        //span 要放在外面, 跟 XiDateHelper 不同 !!
-        return _str.format("" +
-            "<div class='input-group date xg-date' data-provide='datepicker'>" +
-            "    <input data-id='{0}' value='{1}' type='text' class='form-control xd-date {2}'>" +
-            "    <div class='input-group-addon'>" +
-            "        <i class='fa fa-times' onclick='_idate.clean(this)'></i>" +
-            "        <i class='fa fa-calendar' onclick='_idate.toggle(this)'></i>" +
-            "    </div>" +
-            "</div>" +
-            "<span data-id2='{3}' class='{4}'></span>", 
-            dataId, _idate.toDate(value), extClass, dataId + _fun.errTail, _fun.errLabCls);
-    },
-
-    //=== 計算 start ===
-    /**
-      傳回起迄日期(json) for 日期欄位查詢
-      param {string} start 開始日期欄位id
-      param {string} end 結束日期欄位id
-      params {object} box box object
-      return {json} 包含start, end欄位
-     */
-    getStartEnd: function(start, end, box) {
-        //var start2 = box.find
-    },
-
-    //today: yyyy/mm/dd
-    today: function(){
-        var today = new Date();
-        return today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
-    },
-
-    //西元年度
-    getYear: function() {
-        return (new Date()).getFullYear();
-    },
-
-    //to date format(考慮多國語)
-    toDate: function (value) {
-        return (_str.isEmpty(value))
-            ? ''
-            : moment(value).format(_BR.DateEditFormat);
-    },
-    toDt2: function (value) {
-        return (_str.isEmpty(value))
-            ? ''
-            : moment(value).format(_BR.DtFormat2);
-    },
-
-    //get datetime string
-    //time為下拉欄位
-    getDt: function (fDate, fTime, box) {
-        var date = _idate.get(fDate, box);
-        var time = _iselect.get(fTime, box);
-        if (date == '')
-            return '';
-        else
-            return (time == '') ? date : date + ' ' + time;
+    clean: function (btn) {
+        $(btn).parent().parent().datepicker('update', '');
     },
 
     //date, hour, minute fields to datetime string
@@ -2275,32 +2328,6 @@ var _idate = $.extend({}, _ibase, {
         return date + ' ' +
             (hour == '' ? '00' : hour) + ':' +
             (min == '' ? '00' : min);
-    },
-
-    //date1是否大於date2
-    isBig: function(date1, date2) {
-        return (Date.parse(date1) > Date.parse(date2));
-    },
-
-    //計算月份差距 by string
-    getMonthDiff: function (start, end) {
-        return (_str.isEmpty(start) || _str.isEmpty(end))
-            ? 0
-            : _idate.getMonthDiffByDate(new Date(start), new Date(end));
-    },
-
-    //計算月份差距 by date(不考慮日)
-    getMonthDiffByDate: function (d1, d2) {
-        //var months;
-        var months = (d2.getFullYear() - d1.getFullYear()) * 12 + d2.getMonth() - d1.getMonth() + 1;
-        //if (d2.getDate() > d1.getDate())
-        //    months++;
-        return months;
-    },
-
-    //日期(yyyy/mm/dd) 加上年, 傳回新的日期字串
-    addYear: function (date, year) {
-        return (parseInt(date.substring(0, 4)) + year) + date.substring(4);
     },
 
 }); //class
@@ -4320,10 +4347,10 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
  * param tplRowId {string} row template id, required
  * param sortFid {string} (optional) sort fid for sorting function
  * param rowFilter {string} (optional 'tr') filter for find row object
- *   1.inside element -> row, 2.rowsBox -> row
+ *   1.inside element -> row(onDeleteRow), 2.rowsBox -> row(getUpdRows)
  * return {EditMany}
  */
-function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
+function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
 
     /**
      * initial, call by this
@@ -4336,7 +4363,8 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
         this.kid = kid;
         this.tplRow = $('#' + tplRowId).html();
         this.sortFid = sortFid;
-        this.rowFilter = (rowFilter === undefined) ? 'tr' : rowFilter;
+        this.hasRowFilter = !_str.isEmpty(rowFilter);
+        this.rowFilter = rowFilter;
 
         var rowObj = $(this.tplRow);
         _edit.setFidTypeVars(this, rowObj);
@@ -4484,13 +4512,23 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
         return row;
     };
 
+    this.checkRowFilter = function () {
+        if (this.hasRowFilter)
+            return true;
+
+        _log.error('EditMany.js this.rowFilter is empty.');
+        return false;
+    };
+
     /**
      * get row box by inside element/object
      * param elm {element/object}
      * return {object}
      */
     this.elmToRowBox = function (elm) {
-        return $(elm).closest(this.rowFilter);
+        return this.checkRowFilter()
+            ? $(elm).closest(this.rowFilter)
+            : null;
     };
 
     /**
@@ -4533,10 +4571,8 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
      * return {jsons} null if empty
      */ 
     this.getUpdRows = function (upKey, rowsBox) {
-        if (_str.isEmpty(this.rowFilter)) {
-            _log.error('EditMany.js getUpdRows() failed: no this.rowFilter.');
+        if (!this.checkRowFilter())
             return;
-        }
 
         //set sort field
         rowsBox = this.getRowsBox(rowsBox);
@@ -4545,7 +4581,7 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
         //debugger;
         var rows = [];  //return rows        
         var me = this;  //this is not work inside each() !!
-        rowsBox.find(this.rowFilter).each(function (idx, item) {
+        rowsBox.find(me.rowFilter).each(function (idx, item) {
             //add new row if empty key
             var tr = $(item);
             var key = _input.get(me.kid, tr);
@@ -4663,7 +4699,7 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
      * param elm {element} link element
      */
     this.onViewImage = function (table, fid, elm) {
-        var key = this.getKey(this.elmToRowBoxelmToRowBox(elm));
+        var key = this.getKey(this.elmToRowBox(elm));
         if (this.isNewKey(key))
             _tool.msg(_BR.NewFileNotView);
         else
@@ -4694,10 +4730,8 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
         if (!this.hasFile)
             return null;
 
-        if (_str.isEmpty(this.rowFilter)) {
-            _log.error('EditMany.js dataAddFiles() failed: no this.rowFilter.');
+        if (!this.checkRowFilter())
             return null;
-        }
 
         rowsBox = this.getRowsBox(rowsBox);
         var me = this;
@@ -4963,7 +4997,7 @@ function Flow(boxId, mNode, mLine) {
         this.AutoNode = 'A';
 
         //and/or seperator for line condition
-        //js only replace first found, so use regular, value is same to _code.type=AndOr
+        //js only replace first found, so use regular, value is same to code.type=AndOr
         this.OrSep = '{O}';  
         this.AndSep = '{A}';
         this.ColSep = ',';
@@ -4984,7 +5018,8 @@ function Flow(boxId, mNode, mLine) {
         //start node config
         this.StartNodeCfg = {
             filter: this.EpFilter,
-            anchor: 'Continuous',
+            //anchor: 'Continuous',
+            anchor: ['Bottom', 'Left', 'Right'],
             //outlineWidth not work !!
             connectorStyle: {
                 stroke: '#5c96bc',
@@ -5007,7 +5042,8 @@ function Flow(boxId, mNode, mLine) {
         //end node config
         this.EndNodeCfg = {
             dropOptions: { hoverClass: 'dragHover' },
-            anchor: 'Continuous',
+            //anchor: 'Continuous',
+            anchor: ['Top', 'Bottom', 'Left', 'Right'],
             allowLoopback: true,
         };
         //#endregion
@@ -5017,6 +5053,7 @@ function Flow(boxId, mNode, mLine) {
         this.mNode = mNode;
         this.mLine = mLine;
 
+        //this.popupMenu = $('.xf-menu');
         this.divFlowBox = $('#' + boxId);
         this.divLinesBox = $('#divLinesBox');       //hidden
         this.divLineConds = $('#divLineConds');     //div line conds inside modalLineProp
@@ -5124,44 +5161,44 @@ function Flow(boxId, mNode, mLine) {
         */
 
         //line(connection) show context menu
-        plumb.bind('contextmenu', function (c, event) {
+        plumb.bind('contextmenu', function (elm, event) {
             //"this" not work here !!
-            me.showPopupMenu(c, event, false);
+            me.showPopupMenu(elm, event, false);
         });
 
         //event: before build connection
-        //conn: connection        
-        //plumb.bind('connection', function (conn) {
-        plumb.bind('beforeDrop', function (conn) {
+        //info: connection        
+        //plumb.bind('connection', function (info) {
+        plumb.bind('beforeDrop', function (info) {
             //if (this.loading)
             //    return true;
 
             //if connection existed, return false for stop 
-            //conn.source did not work here !!
-            var conn2 = conn.connection;
-            if (plumb.getConnections({ source: conn2.source, target: conn2.target }).length > 0)
+            //info.source did not work here !!
+            var conn = info.connection;
+            if (plumb.getConnections({ source: conn.source, target: conn.target }).length > 0)
                 return false;
 
             //get source node & type
-            //var sourceType = me.elmToNodeRow(conn2.source).NodeType;
+            //var sourceType = me.elmToNodeRow(conn.source).NodeType;
             //var lineType = this.isSourceCondMode(sourceType) ? this.LineTypeCond : this.LineTypeYes;
             var prop = me.getLineProp('');
 
             //set conn style & label
-            conn2.setPaintStyle(prop.style);    //real connection
-            me.setLineLabel(conn2, prop.label);
+            conn.setPaintStyle(prop.style);    //real connection
+            me.setLineLabel(conn, prop.label);
 
             //add parameters(line model) into connection
             //debugger;
             var row = {
-                StartNode: me.elmToNodeValue(conn2.source, 'Id'),
-                EndNode: me.elmToNodeValue(conn2.target, 'Id'),
+                StartNode: me.elmToNodeValue(conn.source, 'Id'),
+                EndNode: me.elmToNodeValue(conn.target, 'Id'),
                 //LineType: lineType,
                 CondStr: '',
                 Sort: 9,
             };
-            me.setLineKey(conn2, me.addLine(row));
-            //this.connSetParas(conn2, line, true);
+            me.setLineKey(conn, me.addLine(row));
+            //this.connSetParas(conn, line, true);
 
             //alert('connect');
             return true;
@@ -5184,10 +5221,14 @@ function Flow(boxId, mNode, mLine) {
 
         //hide context menu (jsPlumb no mousedown event !!)
         $(document).bind('mousedown', function (e) {
+            //if (_obj.isShow(me.popupMenu))
+            //    me.popupMenu.hide(100);
+            
             //"this" is not work here !!
             var filter = me.MenuFilter;
             if (!$(e.target).parents(filter).length > 0)
                 $(filter).hide(100);
+            
         });
     };
 
@@ -5206,7 +5247,7 @@ function Flow(boxId, mNode, mLine) {
         //must put before makeSource/makeTarget !!
         var nodeElm = nodeObj[0];
         plumb.draggable(nodeElm, {
-            //grid: [20, 20],
+            grid: [10, 10],
             //update node position
             stop: function (params) {
                 //debugger;
@@ -5294,7 +5335,7 @@ function Flow(boxId, mNode, mLine) {
      */
     this.loadLines = function (json) {
         //stop drawing
-        //jsPlumb.setSuspendDrawing(true);
+        jsPlumb.setSuspendDrawing(true);
 
         //empty jsplumb lines
         var conns = this.plumb.getAllConnections();   //for in did not work !!
@@ -5310,7 +5351,7 @@ function Flow(boxId, mNode, mLine) {
         this.mLine.loadRows(this.divLinesBox, rows);
 
         //start drawing
-        //jsPlumb.setSuspendDrawing(false, true);
+        jsPlumb.setSuspendDrawing(false, true);
     };
 
     //#region node function
@@ -5419,7 +5460,7 @@ function Flow(boxId, mNode, mLine) {
 
         //add deleted row of node
         var node = $(nodeElm);
-        this.mNode.deleteRow(node.data(_fun.Fid));
+        this.mNode.deleteRow(this.getObjKey(node));
 
         //delete node 
         $(nodeElm).remove();
@@ -5503,12 +5544,12 @@ function Flow(boxId, mNode, mLine) {
     this.isLineCondMode = function (lineType) {
         return (lineType === '2');
     };
-    */
 
     //is node type editable or not
     this.isNodeTypeEditable = function (nodeType) {
         return (nodeType === this.NormalNode || nodeType === this.AutoNode);
     };
+    */
 
     /**
      * get line property: style, label
@@ -5522,8 +5563,17 @@ function Flow(boxId, mNode, mLine) {
         }
     };
 
-    this.getLineKey = function (conn) {
+    this.getLineElmKey = function (conn) {
         return conn.getParameters()['Id'];
+    };
+
+    /**
+     * get object(node/line) key
+     * param obj {object}
+     * return {string} key value
+     */
+    this.getObjKey = function (obj) {
+        return _itext.get('Id', obj);
     };
 
     //set connection label
@@ -5544,7 +5594,7 @@ function Flow(boxId, mNode, mLine) {
     this.deleteLine = function (conn) {
         //add deleted row
         var json = conn.getParameters();    //model
-        this.mLine.deleteRow(json[_fun.Fid]);
+        this.mLine.deleteRow(json.Id);
 
         //delete conn
         this.plumb.deleteConnection(conn);
@@ -5556,18 +5606,42 @@ function Flow(boxId, mNode, mLine) {
     };
     //#endregion (line function)
 
-
-    //elm: node element or connection 
+    /**
+     * show popup menu for node(normal, auto)/line
+     * param elm {element} node element or connection
+     * param event {event}
+     * param isNode {bool} true(node), false(line)
+     */
     this.showPopupMenu = function (elm, event, isNode) {
         //stop default context menu 
         event.preventDefault();
 
         //set instance variables
         this.nowIsNode = isNode;
-        this.nowElm = elm;
+        this.nowElm = isNode ? $(elm).closest(this.NodeFilter)[0] : elm;
+
+        //set edit status
+        var canEdit = true;
+        var nodeType;
+        if (isNode) {
+            nodeType = this.elmToNodeValue(elm, 'NodeType');
+            canEdit = (nodeType == this.NormalNode || nodeType == this.AutoNode);
+        } else {
+            nodeType = this.elmToNodeValue(elm.source, 'NodeType');
+            canEdit = (nodeType == this.StartNode || nodeType == this.AutoNode);
+        }
+        /*
+        //debugger;
+        var item = this.popupMenu.find('.xd-edit');
+        if (canEdit)
+            item.show();
+        else
+            item.hide();
+        */
 
         // Show contextmenu
         $(this.MenuFilter).finish()
+        //this.popupMenu.finish()
             .toggle(100)
             .css({
                 top: event.pageY + 'px',
@@ -5680,7 +5754,7 @@ function Flow(boxId, mNode, mLine) {
 
     //jsplumb connection to line object
     this.connToLine = function (conn) {
-        return this.idToLine(this.getLineKey(conn));
+        return this.idToLine(this.getLineElmKey(conn));
     };
 
     //id to line object
@@ -5722,26 +5796,24 @@ function Flow(boxId, mNode, mLine) {
     };
     //on add end node
     this.onAddEndNode = function () {
-        this.addNode('', this.EndNode);
+        this.addNode('E', this.EndNode);
     };
-    /*
-    this.onAutoNode = function () {
-        this.addNode(this.AutoNode);
+    this.onAddAutoNode = function () {
+        this.addNode('Auto', this.AutoNode);
     };
-    */
     //on add normal node
     this.onAddNormalNode = function () {
         this.addNode('Node', this.NormalNode);
     };
 
     /*
-    this.onDeleteNode = function () {
+    this.deleteNode = function (elm) {
         //delete lines first
 
         //delete node
     };
 
-    this.onDeleteLine = function () {
+    this.deleteLine = function (elm) {
         var tr = $(btn).closest('tr');
     };
     */
@@ -5755,13 +5827,14 @@ function Flow(boxId, mNode, mLine) {
     };
 
     this.onMenuDelete = function () {
-        if (this.nowIsNode) {
+        var me = this;
+        if (me.nowIsNode) {
             _tool.ans('delete this node ?', function () {
-                this.deleteNode(this.nowElm);
+                me.deleteNode(me.nowElm);
             });
         } else {
             _tool.ans('delete this line ?', function () {
-                this.deleteLine(this.nowElm);
+                me.deleteLine(me.nowElm);
             });
         }
     };
@@ -5789,23 +5862,29 @@ function Flow(boxId, mNode, mLine) {
         _modal.hideO(this.modalNodeProp);
 
         //set new value
-        var nodeObj = $(this.nowElm);
-        var row = _form.toJson(nodeObj);
+        var row = _form.toJson(this.eformNode);
         //this.mNode.setRow(nodeObj.data(_fun.Fid), row);
 
-        //update node name
-        nodeObj.text(row.Name);
+        //update node display name
+        var nodeObj = $(this.nowElm);
+        nodeObj.find('.xd-name').text(row.Name);
+
+        //update node form fields
+        _itext.set('Name', row.Name, nodeObj);
+        _itext.set('SignerType', row.SignerType, nodeObj);
+        _itext.set('SignerValue', row.SignerValue, nodeObj);
 
         //change node style, has xf-ep div at the end !!
         //var html = row.Name + '<div class="xf-ep" action="begin"></div>';
         //nodeObj.html(html);
 
+        /*
         //reset auto node class
         if (row.NodeType == this.AutoNode)
             nodeObj.addClass(this.AutoNodeCls);
         else
             nodeObj.removeClass(this.AutoNodeCls);
-
+        */
     };
 
     //line prop click ok

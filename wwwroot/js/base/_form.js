@@ -310,32 +310,6 @@ var _form = {
         }
     },
 
-    /**
-     * change newDiv to active
-     * param newDiv {object} jquery object
-     */ 
-    swap: function (newDiv, fnCallback) {
-        //debugger;
-        var oldDiv = $('.xg-swap.xg-active');
-        if (newDiv === oldDiv) {
-            if (fnCallback !== undefined)
-                fnCallback();
-            return;
-        }
-
-        //effect
-        oldDiv.fadeOut(200, function () {
-            //debugger;
-            oldDiv.removeClass('xg-active');
-            newDiv.addClass('xg-active');
-            if (fnCallback !== undefined)
-                fnCallback();
-
-            newDiv.fadeIn(500);
-        });
-        //e.preventDefault();
-    },
-
     zz_reset: function (form) {
         //var box = $('#' + form);
         //文字欄位

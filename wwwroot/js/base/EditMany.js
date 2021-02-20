@@ -14,10 +14,10 @@
  * param tplRowId {string} row template id, required
  * param sortFid {string} (optional) sort fid for sorting function
  * param rowFilter {string} (optional 'tr') filter for find row object
- *   1.inside element -> row, 2.rowsBox -> row
+ *   1.inside element -> row(onDeleteRow), 2.rowsBox -> row(getUpdRows)
  * return {EditMany}
  */
-function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
+function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
 
     /**
      * initial, call by this
@@ -30,7 +30,8 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
         this.kid = kid;
         this.tplRow = $('#' + tplRowId).html();
         this.sortFid = sortFid;
-        this.rowFilter = (rowFilter === undefined) ? 'tr' : rowFilter;
+        this.hasRowFilter = !_str.isEmpty(rowFilter);
+        this.rowFilter = rowFilter;
 
         var rowObj = $(this.tplRow);
         _edit.setFidTypeVars(this, rowObj);
@@ -178,13 +179,23 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
         return row;
     };
 
+    this.checkRowFilter = function () {
+        if (this.hasRowFilter)
+            return true;
+
+        _log.error('EditMany.js this.rowFilter is empty.');
+        return false;
+    };
+
     /**
      * get row box by inside element/object
      * param elm {element/object}
      * return {object}
      */
     this.elmToRowBox = function (elm) {
-        return $(elm).closest(this.rowFilter);
+        return this.checkRowFilter()
+            ? $(elm).closest(this.rowFilter)
+            : null;
     };
 
     /**
@@ -227,10 +238,8 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
      * return {jsons} null if empty
      */ 
     this.getUpdRows = function (upKey, rowsBox) {
-        if (_str.isEmpty(this.rowFilter)) {
-            _log.error('EditMany.js getUpdRows() failed: no this.rowFilter.');
+        if (!this.checkRowFilter())
             return;
-        }
 
         //set sort field
         rowsBox = this.getRowsBox(rowsBox);
@@ -239,7 +248,7 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
         //debugger;
         var rows = [];  //return rows        
         var me = this;  //this is not work inside each() !!
-        rowsBox.find(this.rowFilter).each(function (idx, item) {
+        rowsBox.find(me.rowFilter).each(function (idx, item) {
             //add new row if empty key
             var tr = $(item);
             var key = _input.get(me.kid, tr);
@@ -357,7 +366,7 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
      * param elm {element} link element
      */
     this.onViewImage = function (table, fid, elm) {
-        var key = this.getKey(this.elmToRowBoxelmToRowBox(elm));
+        var key = this.getKey(this.elmToRowBox(elm));
         if (this.isNewKey(key))
             _tool.msg(_BR.NewFileNotView);
         else
@@ -388,10 +397,8 @@ function EditMany(kid, eformId, tplRowId, sortFid, rowFilter) {
         if (!this.hasFile)
             return null;
 
-        if (_str.isEmpty(this.rowFilter)) {
-            _log.error('EditMany.js dataAddFiles() failed: no this.rowFilter.');
+        if (!this.checkRowFilter())
             return null;
-        }
 
         rowsBox = this.getRowsBox(rowsBox);
         var me = this;

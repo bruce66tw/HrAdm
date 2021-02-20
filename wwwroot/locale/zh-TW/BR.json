@@ -13,7 +13,7 @@
   "BtnCancel": "取消",
   "BtnClose": "關閉",
 
-  "FrontDateFormat": "yyyy/M/d",
+  /*"FrontDateFormat": "yyyy/M/d",*/
   "PlsSelect": "-請選取-",
   "TipDeleteRow": "刪除此筆資料",
 

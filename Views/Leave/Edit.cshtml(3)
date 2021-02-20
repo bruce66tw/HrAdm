@@ -1,0 +1,23 @@
+﻿@{ 
+    var cols = _Fun.DefHCols;
+}
+
+<form id='eform' class='xg-form'>
+	@await Component.InvokeAsync("XiHide", new { fid = "Id" })
+	
+	@await Component.InvokeAsync("XiSelect", new { title = "請假人", fid = "UserId", rows = (List<IdStrDto>)ViewBag.Users, required = true })
+	@await Component.InvokeAsync("XiSelect", new { title = "代理人", fid = "AgentId", rows = (List<IdStrDto>)ViewBag.Users, required = true })
+	@await Component.InvokeAsync("XiSelect", new { title = "假別", fid = "LeaveType", rows = (List<IdStrDto>)ViewBag.Leaves, required = true })
+	@await Component.InvokeAsync("XiDt", new { title = "開始時間", fid = "StartTime", required = true, cols = "2,4" })
+	@await Component.InvokeAsync("XiDt", new { title = "結束時間", fid = "EndTime", required = true, cols = "2,4" })
+	@await Component.InvokeAsync("XiNum", new { title = "請假時數", fid = "Hours", required = true, cols = "2,1" })
+	@await Component.InvokeAsync("XiRead", new { title = "流程簽核狀態", fid = "FlowSignStatus" })
+	@await Component.InvokeAsync("XiCheck", new { title = "資料狀態", fid = "Status", label = "啟用" })
+	@await Component.InvokeAsync("XiRead", new { title = "建檔人員", fid = "Creator" })
+	@await Component.InvokeAsync("XiRead", new { title = "建檔日期", fid = "Created" })
+	@await Component.InvokeAsync("XiRead", new { title = "修改人員", fid = "Reviser" })
+	@await Component.InvokeAsync("XiRead", new { title = "修改日期", fid = "Revised" })
+</form>
+
+@await Component.InvokeAsync("XgSaveBack")
+

@@ -1,12 +1,12 @@
 ﻿//resource for js base component
 var _BR = {
 
-    //=== for moment.js ===
-    DateEditFormat: 'YYYY/MM/DD',
+    //=== moment.js convert these to UI format ===
+    UiDateFormat: 'YYYY/MM/DD',
     //DateShowFormat: 'YYYY年MM月DD日',
-    DtFormat: 'YYYY/MM/DD HH:mm:ss',
+    UiDtFormat: 'YYYY/MM/DD HH:mm:ss',
     //no second
-    DtFormat2: 'YYYY/MM/DD HH:mm',
+    UiDtFormat2: 'YYYY/MM/DD HH:mm',
 
     //check input
     InputWrong: '輸入錯誤。',

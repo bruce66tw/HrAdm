@@ -1,0 +1,24 @@
+﻿@{ 
+    var cols = _Fun.DefHCols;
+}
+
+<form id='eform' class='xg-form'>
+	@await Component.InvokeAsync("XiHide", new { fid = "Id" })
+	
+	@await Component.InvokeAsync("XiText", new { title = "請假者Id", fid = "UserId", maxLen = 10 })
+	@await Component.InvokeAsync("XiText", new { title = "代理人Id", fid = "AgentId", maxLen = 10 })
+	@await Component.InvokeAsync("XiText", new { title = "假別", fid = "LeaveType" })
+	??
+	??
+	@await Component.InvokeAsync("XiNum", new { title = "時數", fid = "Hours" })
+	@await Component.InvokeAsync("XiNum", new { title = "分鐘數", fid = "Mins" })
+	@await Component.InvokeAsync("XiText", new { title = "流程簽核狀態", fid = "FlowSignStatus", maxLen = 1 })
+	@await Component.InvokeAsync("XiCheck", new { title = "資料狀態", fid = "Status" })
+	@await Component.InvokeAsync("XiText", new { title = "Creator", fid = "Creator", maxLen = 10 })
+	??
+	@await Component.InvokeAsync("XiText", new { title = "Reviser", fid = "Reviser", maxLen = 10 })
+	??
+</form>
+
+@await Component.InvokeAsync("XgSaveBack")
+

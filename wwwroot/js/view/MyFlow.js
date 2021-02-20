@@ -24,8 +24,8 @@
         _me.divEditTbar = $('#divEditTbar');
 
         //initial edit one/many
-        _me.mNode = new EditMany('Id', null, 'tplNode', '', '.xf-node');
-        _me.mLine = new EditMany('Id', null, 'tplLine', 'Sort', '.xu-row');
+        _me.mNode = new EditMany('Id', null, 'tplNode', '.xf-node');
+        _me.mLine = new EditMany('Id', null, 'tplLine', '.xd-line', 'Sort');
         _crud.init(config, [null, _me.mNode, _me.mLine]);
 
         //initial flow(jsplumb)

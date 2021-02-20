@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Base.Services;
+@{
+    var br = _Fun.GetBaseRes();
     var cols = "4,6";
 }
 
@@ -61,7 +63,7 @@
     }
 
     .xu-text {
-        width: 180px;
+        width: 150px;
         margin: 5px;
     }
 
@@ -96,7 +98,7 @@
 </div>
 <div class="xp-prog">
     <!-- read form -->
-    <div id="divRead" class="xg-swap xg-active">
+    <div id="divRead">
         <form id='rform' class='xg-form' style="margin-bottom:0;">
             <div class="row">
                 @await Component.InvokeAsync("XiText", new { title = "流程名稱", fid = "Name", maxLen = 30, inRow = true })
@@ -121,7 +123,7 @@
     </div>
 
     <!-- edit form -->
-    <div id="divEdit" class="xg-swap jtk-surface jtk-surface-nopan">
+    <div id="divEdit" class="xg-hide jtk-surface jtk-surface-nopan">
         <form id='eform' class='xg-form'>
             @await Component.InvokeAsync("XiHide", new { fid = "Id" })
             @await Component.InvokeAsync("XiText", new { fid = "Code", maxLen = 20, required = true, extClass = "xu-text", inputTip = "流程代碼" })
@@ -130,7 +132,7 @@
             <div class="btn-group-vertical" role="group" style="margin-left: 5px;" aria-label="button group vertical">
                 <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddStartNode()" title="New Start Node">Start</button>
                 <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddNormalNode()" title="New Node">Node</button>
-                @*<button type="button" class="btn btn-default xu-fun" onclick="_me.onAutoNode()" title="New Auto Node">Auto</button>*@
+                @*<button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddAutoNode()" title="New Auto Node">Auto</button>*@
                 <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddEndNode()" title="New End Node">End</button>
             </div>
         </form>
@@ -139,7 +141,7 @@
 
 <!-- context menu for node & line -->
 <ul class='xf-menu'>
-    <li onclick="_me.flow.onMenuEdit()">Edit</li>
+    <li onclick="_me.flow.onMenuEdit()" class="xd-edit">Edit</li>
     <li onclick="_me.flow.onMenuDelete()">Delete</li>
 </ul>
 
@@ -152,20 +154,12 @@
         @await Component.InvokeAsync("XiHide", new { fid = "FlowId" })
         @await Component.InvokeAsync("XiHide", new { fid = "Name" })
         @await Component.InvokeAsync("XiHide", new { fid = "NodeType" })
-        @await Component.InvokeAsync("XiHide", new { fid = "EditForm" })
-        @await Component.InvokeAsync("XiHide", new { fid = "LimitTime" })
-        @await Component.InvokeAsync("XiHide", new { fid = "TimeUnit" })
-        @await Component.InvokeAsync("XiHide", new { fid = "OverAct" })
         @await Component.InvokeAsync("XiHide", new { fid = "PosX" })
         @await Component.InvokeAsync("XiHide", new { fid = "PosY" })
-        @*
-            @await Component.InvokeAsync("XiHide", new { fid = "Height" })
-            @await Component.InvokeAsync("XiHide", new { fid = "Width" })
-        *@
         @await Component.InvokeAsync("XiHide", new { fid = "SignerType" })
-        @await Component.InvokeAsync("XiHide", new { fid = "SignerId" })
+        @await Component.InvokeAsync("XiHide", new { fid = "SignerValue" })
 
-        {{Name}}
+        <div class="xd-name">{{Name}}</div>
         <!-- flow end point -->
         <div class="xf-ep" action="begin"></div>
     </div>
@@ -179,13 +173,9 @@
     <div class="xd-line">
         @await Component.InvokeAsync("XiHide", new { fid = "Id" })
         @await Component.InvokeAsync("XiHide", new { fid = "FlowId" })
-        @*await Component.InvokeAsync("XiHide", new { fid = "Name" })*@
         @await Component.InvokeAsync("XiHide", new { fid = "CondStr" })
         @await Component.InvokeAsync("XiHide", new { fid = "StartNode" })
         @await Component.InvokeAsync("XiHide", new { fid = "EndNode" })
-        @await Component.InvokeAsync("XiHide", new { fid = "IsAgree" })
-        @await Component.InvokeAsync("XiHide", new { fid = "PassType" })
-        @await Component.InvokeAsync("XiHide", new { fid = "PassNum" })
         @await Component.InvokeAsync("XiHide", new { fid = "Sort" })
     </div>
 </script>
@@ -200,23 +190,17 @@
             </div>
             <div class="modal-body">
                 <form id="eformNode" class="form-horizontal xg-form" style="padding:5px 20px;">
-                    @*Html.XiLabel("NodeTypeName", "", "Node Type :", 8)*@
-                    @await Component.InvokeAsync("XiSelect", new { title = "Node Type :", fid = "NodeType", rows = (List<IdStrDto>)ViewBag.NodeTypes, cols = cols })
+                    @await Component.InvokeAsync("XiHide", new { fid = "NodeType" })
+                    @*await Component.InvokeAsync("XiSelect", new { title = "Node Type :", fid = "NodeType", rows = (List<IdStrDto>)ViewBag.NodeTypes, cols = cols })*@
+                    @*await Component.InvokeAsync("XiSelect", new { title = "簽核時間 :", fid = "LimitType", rows = (List<IdStrDto>)ViewBag.NodeLimitTypes, cols = cols })*@
                     @await Component.InvokeAsync("XiText", new { title = "Node Name :", fid = "Name", maxLen = 20, required = true, cols = cols })
                     @await Component.InvokeAsync("XiSelect", new { title = "Signer Type :", fid = "SignerType", rows = (List<IdStrDto>)ViewBag.SignerTypes, cols = cols })
                     @await Component.InvokeAsync("XiText", new { title = "Signer Value :", fid = "SignerValue", maxLen = 30, cols = cols })
-
-                    @*
-                        @Html.XiSelect("NodeType", "", (List<IdStrDto>)ViewBag.NodeTypes, "Node Type :", true, cols, new PropSelectDto() { AddEmptyRow = false })
-                        @Html.XiText("Name", "", "Node Name :", 20, true, cols: cols)
-                        @Html.XiSelect("SignerType", "", (List<IdStrDto>)ViewBag.SignerTypes, "Signer Type :", false, cols)
-                        @Html.XiText("SignerValue", "", "Signer Value :", cols: cols)
-                    *@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="_me.flow.onModalNodeOk()">OK</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@br.BtnCancel</button>
+                <button type="button" class="btn btn-primary" onclick="_me.flow.onModalNodeOk()">@br.BtnYes</button>
             </div>
         </div>
     </div>
@@ -258,8 +242,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="_me.flow.onModalLineOk()">OK</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@br.BtnCancel</button>
+                <button type="button" class="btn btn-primary" onclick="_me.flow.onModalLineOk()">@br.BtnYes</button>
             </div>
         </div>
     </div>
@@ -272,6 +256,5 @@
         <td>@await Component.InvokeAsync("XiSelect", new { fid = "Op", value = "{{Op}}", rows = (List<IdStrDto>)ViewBag.LineOps, inRow = true })</td>
         <td>@await Component.InvokeAsync("XiText", new { fid = "Value", value = "{{Value}}", maxLen = 30, inRow = true })</td>
         <td width='100px' class='text-center'>@await Component.InvokeAsync("XgDeleteUpDown", new { fnDeleteRow = "_me.flow.onDeleteLineCond(this)" })</td>
-
     </tr>
 </script>

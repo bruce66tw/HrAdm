@@ -1,7 +1,7 @@
 ﻿/**
  * note:
  *   1.reserved function:
- *     a.fnAfterSwap(readMode): called after _form.swap()
+ *     a.fnAfterSwap(readMode): called after _crud.swap()
  */
 var _crud = {
 
@@ -147,7 +147,7 @@ var _crud = {
         if (edit.eform == null)
             return;
 
-        _idate.init('', edit.eform);  //init 日期欄位(所有欄位)
+        _idate.init('', edit.eform);  //init all date inputs
         _valid.init(edit.eform);
         var childLen = _crud.getEditChildLen(edit);
         for (var i = 0; i < childLen; i++)
@@ -170,6 +170,27 @@ var _crud = {
         if (find2 !== null && _obj.isShow(find2))
             _json.copy(_form.toJson(find2), row);
         return row;
+    },
+
+    /**
+     * change newDiv to active
+     * param newDiv {object} jquery object
+     */ 
+    swap: function (toRead) {
+        var oldDiv, newDiv;
+        if (toRead) {
+            oldDiv = _me.divEdit;
+            newDiv = _me.divRead;
+        } else {
+            oldDiv = _me.divRead;
+            newDiv = _me.divEdit;
+        }
+
+        if (_obj.isShow(oldDiv)) {
+            oldDiv.fadeToggle(200);
+            newDiv.fadeToggle(500);
+        }
+        _crud._afterSwap(toRead);
     },
 
     //=== event start ===
@@ -215,12 +236,11 @@ var _crud = {
      * onclick Create button
      */
     onCreate: function () {
-        //_me.key = '';
         var fun = _fun.FunC;
         _prog.setPath(fun);
         _crud.setEditStatus(fun);
         _crud.resetForm(_me.edit0);
-        _form.swap(_me.divEdit, function () { _crud._afterSwap(fals) });
+        _crud.swap(false);        
     },
 
     /**
@@ -251,18 +271,8 @@ var _crud = {
             //_me.key = key;
             _prog.setPath(funType);
             _crud.setEditStatus(funType);
-
-            _form.swap(_me.divEdit, function () {
-                _crud.loadJson(data);
-                _crud._afterSwap(false);
-            });
-
-            /*
-            //trigger custom function if any
-            if ($.isFunction(_me._ueOnUpdate)){
-                _me._ueOnUpdate(data);
-            }
-            */
+            _crud.swap(false);
+            _crud.loadJson(data);
         });
     },
 
@@ -727,8 +737,7 @@ var _crud = {
     toReadMode: function () {
         //_me.divReadTool.show();
         _prog.resetPath();
-        _form.swap(_me.divRead);
-        _crud._afterSwap(true);
+        _crud.swap(true);
     },
 
     _afterSwap: function (toRead) {

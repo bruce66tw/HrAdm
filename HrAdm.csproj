@@ -41,6 +41,7 @@
     <Content Remove="wwwroot\js\base\Flow.js" />
     <Content Remove="wwwroot\js\base\_check.j_old" />
     <Content Remove="wwwroot\js\base\_datatable.j_old" />
+    <Content Remove="wwwroot\js\base\_date.js" />
     <Content Remove="wwwroot\js\base\_editMany.js_old" />
     <Content Remove="wwwroot\js\base\_formData.js" />
     <Content Remove="wwwroot\js\base\_multi.js_old" />
@@ -126,6 +127,7 @@
     <None Include="wwwroot\js\base\_ibase.js" />
     <None Include="wwwroot\js\base\_icheck.js" />
     <None Include="wwwroot\js\base\_icolor.js" />
+    <None Include="wwwroot\js\base\_date.js" />
     <None Include="wwwroot\js\base\_idate.js" />
     <None Include="wwwroot\js\base\_ifile.js" />
     <None Include="wwwroot\js\base\_ihtml.js" />
